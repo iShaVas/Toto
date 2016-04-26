@@ -4,7 +4,7 @@ import os
 from flask_login import LoginManager
 from config import basedir
 
-app = Flask(__name__, static_folder='../static/', template_folder='../static/')
+app = Flask(__name__, static_folder=os.path.join(basedir, 'static'), template_folder=os.path.join(basedir, 'templates'))
 
 app.config.from_object('config')
 app.config['DEBUG'] = True
