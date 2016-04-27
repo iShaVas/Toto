@@ -16,7 +16,7 @@ from server.models import User
 @app.route('/')
 def index():
     if current_user.is_authenticated:
-        return render_template('index.html')
+        return render_template('index.html', user=current_user)
     else:
         return redirect('/login')
 
@@ -57,3 +57,12 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('index'))
+
+
+@app.route('/admin')
+@login_required
+def admin():
+    if current_user.role != 'ADMIN':
+        return redirect('/')
+    return render_template('admin.html')
+

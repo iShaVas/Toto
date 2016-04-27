@@ -26,3 +26,37 @@ class User(db.Model):
 
     def __repr__(self):
         return '<User %r>' % (self.nickname)
+
+
+class Match(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    tournament = db.Column(db.String(64), db.ForeignKey('tournament.id'), index=True)
+    home_team = db.Column(db.String(64), index=True)
+    away_team = db.Column(db.String(64), index=True)
+    time_start = db.Column(db.DateTime, index=True)
+    result = db.Column(db.Integer, index=True)
+    home_team_score = db.Column(db.Integer, index=True)
+    away_team_score = db.Column(db.Integer, index=True)
+
+
+class Tournament(db.Model):
+    id = db.Column(db.String(64), primary_key=True)
+    name = db.Column(db.String(64), index=True)
+    date_start = db.Column(db.DateTime, index=True)
+    date_end = db.Column(db.DateTime, index=True)
+
+
+class Bet(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), index=True)
+    match_id = db.Column(db.Integer, db.ForeignKey('match.id'), index=True)
+    result = db.Column(db.Integer, index=True)
+    home_team_score = db.Column(db.Integer, index=True)
+    away_team_score = db.Column(db.Integer, index=True)
+
+
+class UserPoint(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), index=True)
+    match_id = db.Column(db.Integer, db.ForeignKey('match.id'), index=True)
+    points = db.Column(db.Integer, index=True)
