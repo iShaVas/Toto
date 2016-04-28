@@ -5,11 +5,29 @@
         <link rel="stylesheet" type="text/css" href="/static/bootstrap/bootstrap.css">
     </head>
     <body>
-        <h1>Login</h1>
-        <form action="" method="post" name="login">
-            <p>{{form.nickname}}</p>
-            <p>{{form.password}}</p>
-            <p><input type="submit" value="Login"></p>
-        </form>
+        <div class="container-fluid">
+            <form action="" method="post" name="login" style="width: 200px" class="center-block">
+                <div class="row">
+                    <h1 class="text-center">Вход</h1>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label for="nickname">Имя пользователя</label>
+                            {{form.nickname(class="form-control")}}
+                        </div>
+                    </div>
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label for="password">Пароль</label>
+                            {{form.password(class="form-control")}}
+                        </div>
+                    </div>
+                    <div class="col-xs-12">
+                        <input class="btn btn-success form-control" type="submit" value="Login">
+                    </div>
+                </div>
+            </form>
+        </div>
     </body>
 </html>

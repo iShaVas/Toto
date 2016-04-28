@@ -4,14 +4,14 @@ from wtforms.validators import equal_to, length, DataRequired
 
 
 class RegistrationForm(Form):
-    first_name = StringField('First Name', validators=[DataRequired()])
-    last_name = StringField('Last Name', validators=[DataRequired()])
-    nickname = StringField('Last Name', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    confirmpass = PasswordField('Confirm', validators=[equal_to('password'), length(max=255)])
-    email = StringField('Email', validators=[DataRequired()])
+    first_name = StringField('First Name', validators=[DataRequired()], _name='first_name')
+    last_name = StringField('Last Name', validators=[DataRequired()], _name='last_name')
+    nickname = StringField('Last Name', validators=[DataRequired()], _name='nickname')
+    password = PasswordField('Password', validators=[DataRequired()], _name='password')
+    confirmpass = PasswordField('Confirm', validators=[equal_to('password'), length(max=255)], _name='confirmpass')
+    email = StringField('Email', validators=[DataRequired()], _name='email')
 
 
 class LoginForm(Form):
-    nickname = StringField('Last Name', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
+    nickname = StringField('Nickname', validators=[DataRequired()], _name='nickname')
+    password = PasswordField('Password', validators=[DataRequired()], _name='password')
