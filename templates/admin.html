@@ -1,10 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Admin Page</title>
-</head>
-<body>
-    
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <title>Admin Page</title>
+        <script src="/static/jquery/jquery-2.2.3.min.js"></script>
+        <script src="/static/bootstrap/bootstrap.js"></script>
+        <link rel="stylesheet" type="text/css" href="/static/bootstrap/bootstrap.css">
+    </head>
+
+    <body>
+        <h1>Add Match</h1>
+            <form action="/admin" method="post" name="admin">
+                {{form.tournament}}
+
+                {{form.home_team}}
+                {{form.away_team}}
+                {{form.time_start}}
+
+                {{form.timezone}}
+
+                <p><input type="submit" value="Submit"></p>
+            </form>
+    </body>
 </html>

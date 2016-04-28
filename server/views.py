@@ -1,10 +1,11 @@
+import datetime
 import uuid
 
 from flask import render_template
 import flask_login
-
 from server import app
-from server.forms import RegistrationForm
+from server.forms import RegistrationForm, AddMatchForm
+from server.match_dao import add_match
 from server.user_dao import register_user, get_user_by_nickname
 from flask import render_template, flash, redirect, session, url_for, request, g
 from flask_login import login_user, logout_user, current_user, login_required
@@ -59,10 +60,17 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route('/admin')
+@app.route('/admin', methods=['GET', 'POST'])
 @login_required
 def admin():
     if current_user.role != 'ADMIN':
         return redirect('/')
-    return render_template('admin.html')
+    form = AddMatchForm()
+    if form.validate_on_submit():
+        date = datetime.datetime.strptime(form.time_start.data, '%Y-%m-%d %H:%M')
+        date = date - datetime.timedelta(hours=form.timezone.data)
+        add_match(form.tournament.data, form.home_team.data, form.away_team.data, date)
+        return redirect('/admin')
+
+    return render_template('admin.html', form=form)
 
