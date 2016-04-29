@@ -38,12 +38,18 @@ class Match(db.Model):
     home_team_score = db.Column(db.Integer, index=True)
     away_team_score = db.Column(db.Integer, index=True)
 
+    def __repr__(self):
+        return '<Match {0}-{1}>'.format(self.home_team, self.away_team)
+
 
 class Tournament(db.Model):
     id = db.Column(db.String(64), primary_key=True)
     name = db.Column(db.String(64), index=True)
     date_start = db.Column(db.DateTime, index=True)
     date_end = db.Column(db.DateTime, index=True)
+
+    def __repr__(self):
+        return '<Tournament {0}>'.format(self.id)
 
 
 class Bet(db.Model):
@@ -54,9 +60,15 @@ class Bet(db.Model):
     home_team_score = db.Column(db.Integer, index=True)
     away_team_score = db.Column(db.Integer, index=True)
 
+    def __repr__(self):
+        return '<Bet: {0}:{1}>'.format(self.home_team_score, self.away_team_score)
+
 
 class UserPoint(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), index=True)
     match_id = db.Column(db.Integer, db.ForeignKey('match.id'), index=True)
     points = db.Column(db.Integer, index=True)
+
+    def __repr__(self):
+        return '<UserPoint: user {0}, match {1}, points {2}>'.format(self.user_id, self.match_id, self.points)
