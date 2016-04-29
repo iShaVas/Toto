@@ -2,7 +2,7 @@ import datetime
 
 import flask_login
 from server.forms import RegistrationForm, AddMatchForm
-from server.match_dao import add_match
+from server.match_dao import add_match, get_nearest_matches_and_bets_by_user
 from server.user_dao import register_user, get_user_by_nickname
 from flask import render_template, redirect, url_for
 from flask_login import logout_user, current_user, login_required
@@ -19,9 +19,16 @@ def load_user(nickname):
 @app.route('/')
 def index():
     if current_user.is_authenticated:
-        return render_template('index.html', user=current_user)
+        return redirect('/home')
     else:
         return redirect('/login')
+
+
+@app.route('/home')
+@login_required
+def home():
+    matches = get_nearest_matches_and_bets_by_user(current_user.id)
+    return render_template('index.html', user=current_user, matches=matches, past_matches=[])
 
 
 @app.route('/register', methods=['GET', 'POST'])
