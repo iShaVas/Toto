@@ -1,17 +1,19 @@
 import datetime
-import uuid
 
-from flask import render_template
 import flask_login
-from server import app
 from server.forms import RegistrationForm, AddMatchForm
 from server.match_dao import add_match
 from server.user_dao import register_user, get_user_by_nickname
-from flask import render_template, flash, redirect, session, url_for, request, g
-from flask_login import login_user, logout_user, current_user, login_required
+from flask import render_template, redirect, url_for
+from flask_login import logout_user, current_user, login_required
 from server import app, db, login_manager
 from server.forms import LoginForm
 from server.models import User
+
+
+@login_manager.user_loader
+def load_user(nickname):
+    return get_user_by_nickname(nickname)
 
 
 @app.route('/')
@@ -33,11 +35,6 @@ def register():
     return render_template('register.html', form=form)
 
 
-@login_manager.user_loader
-def load_user(nickname):
-    return get_user_by_nickname(nickname)
-
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -50,8 +47,7 @@ def login():
                 flask_login.login_user(user)
                 return redirect('/')
 
-    return render_template('login.html',
-                           form=form)
+    return render_template('login.html', form=form)
 
 
 @app.route('/logout')
