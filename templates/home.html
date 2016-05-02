@@ -3,9 +3,10 @@
 
 <head>
     <meta charset="utf-8">
-    <script src="/static/jquery/jquery-2.2.3.min.js"></script>
-    <script src="/static/bootstrap/bootstrap.js"></script>
-    <link rel="stylesheet" type="text/css" href="/static/bootstrap/bootstrap.css">
+    <script src="/static/libs/jquery/jquery-2.2.3.min.js"></script>
+    <script src="/static/libs/bootstrap/bootstrap.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/libs/bootstrap/bootstrap.css">
+
     <title>Home</title>
 
     <!-- TODO: move it to .css -->
@@ -30,9 +31,9 @@
                 <div class="row">
                     <div class="col-xs-5 text-right"><p>{{match.Match.home_team}}</p></div>
                     <div class="col-xs-2 text-center match-score-column">
-                        <input class="team-score-input" value="{{match.Bet.home_team_score}}"/>
+                        <input class="team-score-input" value="{{match.Bet.home_team_score}}" data-match-id="{{match.Match.id}}" id="match_{{match.Match.id}}_home"/>
                         <span>:</span>
-                        <input class="team-score-input" value="{{match.Bet.away_team_score}}"/>
+                        <input class="team-score-input" value="{{match.Bet.away_team_score}}" data-match-id="{{match.Match.id}}" id="match_{{match.Match.id}}_away"/>
                     </div>
                     <div class="col-xs-5 text-left"><p>{{match.Match.away_team}}</p></div>
                 </div>
@@ -55,6 +56,8 @@
             </div>
         </div>
     </div>
+
+    <script src="/static/js/home.js"></script>
 </body>
 
 </html>
