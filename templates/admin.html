@@ -4,22 +4,82 @@
         <meta charset="UTF-8">
         <title>Admin Page</title>
         <script src="/static/jquery/jquery-2.2.3.min.js"></script>
-        <script src="/static/bootstrap/bootstrap.js"></script>
-        <link rel="stylesheet" type="text/css" href="/static/bootstrap/bootstrap.css">
+    <script src="/static/bootstrap/js/bootstrap.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap.css">
     </head>
 
     <body>
-        <h1>Add Match</h1>
-            <form action="/admin" method="post" name="admin">
-                {{form.tournament}}
+    {% include 'header.html' %}
+        <div class="container-fluid">
+            <form action="/admin" method="post" name="admin" style="width: 500px" class="center-block">
+                <div class="row">
+                    <h2 class="text-left">Добавить матч</h2>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="home_team">Домашняя команда</label>
+                            {{form.home_team(class_="form-control")}}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="away_team">Гостевая команда</label>
+                            {{form.away_team(class_="form-control")}}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
 
-                {{form.home_team}}
-                {{form.away_team}}
-                {{form.time_start}}
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label for="time_start">Дата начала</label>
+                            {{form.date_start(class="form-control", type="date", id="date_start")}}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="time_start">Время начала</label>
+                            {{form.time_start(class="form-control", type="time", step="300", value="22:00")}}
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="timezone">Часовой пояс</label>
+                                {{form.timezone(class_="form-control")}}
+                        </div>
+                    </div>
+                </div>
 
-                {{form.timezone}}
 
-                <p><input type="submit" value="Submit"></p>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="tournament">Турнир</label>
+                            {{form.tournament(class_="form-control")}}
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-md-offset-2" style="padding-top: 25px">
+                        <input type="submit" class="btn btn-success form-control" value="Сохранить">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12">
+                     {{form.add_match_area(class="form-control", rows="5", style="margin-top: 50px")}}</div>
+                 </div>
             </form>
+
+        </div>
+
+
+        <script>
+            Date.prototype.toDateInputValue = (function() {
+                var local = new Date(this);
+                local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+                return local.toJSON().slice(0,10);
+            });
+            $("#date_start").val(new Date().toDateInputValue());
+        </script>
     </body>
 </html>

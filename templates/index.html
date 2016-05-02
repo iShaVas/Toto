@@ -4,13 +4,16 @@
 <head>
     <meta charset="utf-8">
     <script src="/static/jquery/jquery-2.2.3.min.js"></script>
-    <script src="/static/bootstrap/bootstrap.js"></script>
-    <link rel="stylesheet" type="text/css" href="/static/bootstrap/bootstrap.css">
+    <script src="/static/bootstrap/js/bootstrap.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap.css">
     <title>Home</title>
 </head>
 
 <body>
-	Welcome, {{user.first_name}}
+    {% include 'header.html' %}
+    <div style="padding-top: 50px">
+	    Welcome, {{user.first_name}}
+    </div>
 </body>
 
 </html>

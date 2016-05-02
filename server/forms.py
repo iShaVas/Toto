@@ -1,6 +1,7 @@
 from flask_wtf import Form
-from wtforms import StringField, PasswordField, SelectField
+from wtforms import StringField, PasswordField, SelectField, TextField, TextAreaField
 from wtforms.validators import equal_to, length, DataRequired
+from wtforms.widgets import TextArea
 
 
 class RegistrationForm(Form):
@@ -18,11 +19,14 @@ class LoginForm(Form):
 
 
 class AddMatchForm(Form):
-    tournament = SelectField('Tournament', validators=[DataRequired()], choices=[('ULC2015', 'ULC2015')], default='ULC2015')
+    tournament = SelectField('Tournament', validators=[DataRequired()], choices=[('ULC2015', 'ULC2015')],
+                             default='ULC2015')
     home_team = StringField('Home Team', validators=[DataRequired()])
     away_team = StringField('Away Team', validators=[DataRequired()])
     time_start = StringField('Time Start', validators=[DataRequired()])
+    date_start = StringField('Time Start', validators=[DataRequired()])
     timezone = SelectField('Time Start', validators=[DataRequired()], choices=[(0, 'UTC+0'), (1, 'UTC+1'), (2, 'UTC+2'),
                                                                                (3, 'UTC+3'), (4, 'UTC+4'), (5, 'UTC+5'),
                                                                                (6, 'UTC+6'), (7, 'UTC+7'),
                                                                                (8, 'UTC+8')], default=4, coerce=int)
+    add_match_area = TextAreaField('Add Match Area')

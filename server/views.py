@@ -1,6 +1,8 @@
 import datetime
 
 import flask_login
+import re
+
 from server.forms import RegistrationForm, AddMatchForm
 from server.match_dao import add_match
 from server.user_dao import register_user, get_user_by_nickname
@@ -62,11 +64,25 @@ def admin():
     if current_user.role != 'ADMIN':
         return redirect('/')
     form = AddMatchForm()
-    if form.validate_on_submit():
-        date = datetime.datetime.strptime(form.time_start.data, '%Y-%m-%d %H:%M')
-        date = date - datetime.timedelta(hours=form.timezone.data)
-        add_match(form.tournament.data, form.home_team.data, form.away_team.data, date)
-        return redirect('/admin')
+    if form.is_submitted():
+        if form.add_match_area.data != '':
+            r = re.search('(\d\d:\d\d)\s+\"([\w\d\s]+)\"\s+-\s+\"([\w\d\s]+)\"', form.add_match_area.data)
+            if r is not None:
+                home_team = r.group(2)
+                away_team = r.group(3)
+                time = r.group(1)
+                date = datetime.datetime.strptime(form.date_start.data, '%Y-%m-%d')
+                time = datetime.datetime.strptime(time, '%H:%M')
+                date = date.replace(hour=time.hour, minute=time.minute)
+                date = date - datetime.timedelta(hours=form.timezone.data)
+                add_match(form.tournament.data, home_team, away_team, date)
+                return redirect('/admin')
+        if form.validate():
+            date = datetime.datetime.strptime(form.date_start.data, '%Y-%m-%d')
+            time = datetime.datetime.strptime(form.time_start.data, '%H:%M')
+            date = date.replace(hour=time.hour, minute=time.minute)
+            date = date - datetime.timedelta(hours=form.timezone.data)
+            add_match(form.tournament.data, form.home_team.data, form.away_team.data, date)
+            return redirect('/admin')
 
     return render_template('admin.html', form=form)
-
