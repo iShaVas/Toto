@@ -14,7 +14,7 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
              <ul class="nav navbar-nav">
-                <li><a href="#">Сделать ставку<span class="sr-only">(current)</span></a></li>
+                <li><a href="/home">Сделать ставку<span class="sr-only">(current)</span></a></li>
                 <li><a href="/statistics">Статистика</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
@@ -23,17 +23,14 @@
                 {% endif %}
                 <li><a href="/logout">Выйти</a></li>
                 <li aria-label="Left Align">
-                    <a href="#S"><span class="glyphicon glyphicon-cog"></span></a>
+                    <a href="#"><span class="glyphicon glyphicon-cog"></span></a>
                 </li>
             </ul>
-    {% endif %}
-
-    {% if not current_user.is_authenticated %}
+        </div>
+    {% else %}
         <ul class="nav navbar-nav navbar-right">
-                <li><a href="/register">Регистрация</a></li>
+            <li><a href="/register">Регистрация</a></li>
         </ul>
     {% endif %}
-
-    </div>
   </div>
 </nav>
