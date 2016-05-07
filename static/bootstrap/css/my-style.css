@@ -1,0 +1,33 @@
+.navbar-default {
+    background-color: #337ab7;
+    }
+
+.navbar {
+    border-radius: 0px;
+    border: 0px;
+}
+
+.nav.navbar-nav.navbar-right a {
+    color: white;
+}
+
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+color: #eee;  /*Sets the text hover color on navbar*/
+}
+
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active >
+ a:hover, .navbar-default .navbar-nav > .active > a:focus {
+color: white; /*BACKGROUND color for active*/
+}
+
+
+.navbar-default .navbar-nav > li > a {
+   color: white; /*Change active text color here*/
+    }
+
+.navbar-default .navbar-brand {
+    color: white;
+    }
+.navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
+    color: #eee;
+}

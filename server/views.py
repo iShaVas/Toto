@@ -14,7 +14,7 @@ from flask_login import logout_user, current_user, login_required
 from flask import request
 from server import app, db, login_manager
 from server.forms import LoginForm
-from server.models import User
+from server.models import User, UserPoint
 
 
 @login_manager.user_loader
@@ -112,5 +112,6 @@ def save_bet():
     })
 
 
-
-
+@app.route('/statistics', methods=['GET', 'POST'])
+def statistics():
+    return render_template('statistics.html')
