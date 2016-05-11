@@ -1,0 +1,8 @@
+        .team-score-input{
+            width: 20px;
+            text-align: center;
+        }
+        .match-score-column{
+            white-space: nowrap;
+            padding: 0px;
+        }
