@@ -1,20 +1,18 @@
 import datetime
-import json
-
-import flask_login
 import re
 
-
-from server.dao.bet_dao import add_new_bet
-from server.forms import RegistrationForm, AddMatchForm
-from server.match_dao import add_match, get_nearest_matches_and_bets_by_user, get_past_matches_and_bets_by_user
-from server.user_dao import register_user, get_user_by_nickname
+import flask_login
 from flask import render_template, redirect, url_for, jsonify
-from flask_login import logout_user, current_user, login_required
 from flask import request
-from server import app, db, login_manager
+from flask_login import logout_user, current_user, login_required
+from server.dao.match_dao import add_match, get_nearest_matches_and_bets_by_user, get_past_matches_and_bets_by_user
+
+from server import app, login_manager
+from server.dao.bet_dao import add_new_bet
+from server.dao.user_dao import register_user, get_user_by_nickname
 from server.forms import LoginForm
-from server.models import User, UserPoint
+from server.forms import RegistrationForm, AddMatchForm
+from server.models import User
 
 
 @login_manager.user_loader
@@ -78,17 +76,20 @@ def admin():
     form = AddMatchForm()
     if form.is_submitted():
         if form.add_match_area.data != '':
-            r = re.search('(\d\d:\d\d)\s+\"([\w\d\s]+)\"\s+-\s+\"([\w\d\s]+)\"', form.add_match_area.data)
-            if r is not None:
-                home_team = r.group(2)
-                away_team = r.group(3)
-                time = r.group(1)
-                date = datetime.datetime.strptime(form.date_start.data, '%Y-%m-%d')
-                time = datetime.datetime.strptime(time, '%H:%M')
-                date = date.replace(hour=time.hour, minute=time.minute)
-                date = date - datetime.timedelta(hours=form.timezone.data)
-                add_match(form.tournament.data, home_team, away_team, date)
-                return redirect('/admin')
+            strings = form.add_match_area.data.split("\r\n")
+            for string in strings:
+                if string != '':
+                    r = re.search('(\d\d:\d\d)\s+\"([\w\d\s]+)\"\s+-\s+\"([\w\d\s]+)\"', string)
+                    if r is not None:
+                        home_team = r.group(2)
+                        away_team = r.group(3)
+                        time = r.group(1)
+                        date = datetime.datetime.strptime(form.date_start.data, '%Y-%m-%d')
+                        time = datetime.datetime.strptime(time, '%H:%M')
+                        date = date.replace(hour=time.hour, minute=time.minute)
+                        date = date - datetime.timedelta(hours=form.timezone.data)
+                        add_match(form.tournament.data, home_team, away_team, date)
+            return redirect('/admin')
         if form.validate():
             date = datetime.datetime.strptime(form.date_start.data, '%Y-%m-%d')
             time = datetime.datetime.strptime(form.time_start.data, '%H:%M')

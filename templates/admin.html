@@ -7,72 +7,123 @@
     <script src="/static/libs/bootstrap/js/bootstrap.js"></script>
     <link rel="stylesheet" type="text/css" href="/static/libs/bootstrap/css/bootstrap.css">
     <link rel="stylesheet" href="/static/css/header.css">
+    <link rel="stylesheet" href="/static/css/admin.css">
     </head>
 
     <body>
     {% include 'header.html' %}
         <div class="container-fluid">
-            <form action="/admin" method="post" name="admin" style="width: 500px" class="center-block">
-                <div class="row">
-                    <h2 class="text-left">Добавить матч</h2>
+            <div class="tabbable tabs-left">
+                <div class="col-md-1" style="margin-left: 400px;">
+                    <ul class="nav nav-pills nav-stacked">
+                      <li  class="active"><a href="#standart_form" data-toggle="tab">One</a></li>
+                      <li><a href="#area_form" data-toggle="tab">Two</a></li>
+                    </ul>
                 </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="home_team">Домашняя команда</label>
-                            {{form.home_team(class_="form-control")}}
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="away_team">Гостевая команда</label>
-                            {{form.away_team(class_="form-control")}}
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
+                <div class="tab-content">
+                     <div class="tab-pane active" id="standart_form">
 
-                    <div class="col-md-5">
-                        <div class="form-group">
-                            <label for="time_start">Дата начала</label>
-                            {{form.date_start(class="form-control", type="date", id="date_start")}}
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="time_start">Время начала</label>
-                            {{form.time_start(class="form-control", type="time", step="300", value="22:00")}}
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="timezone">Часовой пояс</label>
-                                {{form.timezone(class_="form-control")}}
-                        </div>
-                    </div>
-                </div>
+                         <form action="/admin" method="post" name="admin" style="width: 500px" class="center-block">
+                            <div class="row">
+                                <h2 class="text-left">Добавить матч</h2>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="home_team">Домашняя команда</label>
+                                        {{form.home_team(class_="form-control")}}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="away_team">Гостевая команда</label>
+                                        {{form.away_team(class_="form-control")}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        <label for="time_start">Дата начала</label>
+                                        {{form.date_start(class="form-control", type="date", id="date_start")}}
+                                </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="time_start">Время начала</label>
+                                        {{form.time_start(class="form-control", type="time", step="300", value="22:00")}}
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="timezone">Часовой пояс</label>
+                                            {{form.timezone(class_="form-control")}}
+                                    </div>
+                                </div>
+                            </div>
 
 
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="tournament">Турнир</label>
-                            {{form.tournament(class_="form-control")}}
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-md-offset-2" style="padding-top: 25px">
-                        <input type="submit" class="btn btn-primary form-control" value="Сохранить">
-                    </div>
-                </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="tournament">Турнир</label>
+                                        {{form.tournament(class_="form-control")}}
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-md-offset-2" style="padding-top: 25px">
+                                    <input type="submit" class="btn btn-primary form-control" value="Сохранить">
+                                </div>
+                            </div>
+                         </form>
+                     </div>
+                     <div class="tab-pane" id="area_form">
+                         <form action="/admin" method="post" name="admin" style="width: 500px" class="center-block">
+                            <div class="row">
+                                <h2 class="text-left">Добавить матч</h2>
+                            </div>
+                            <div class="row">
 
-                <div class="row">
-                    <div class="col-xs-12">
-                     {{form.add_match_area(class="form-control", rows="5", style="margin-top: 50px")}}</div>
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        <label for="time_start">Дата начала</label>
+                                        {{form.date_start(class="form-control", type="date", id="date_start_area")}}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                     <div class="form-group">
+                                        <label for="tournament">Турнир</label>
+                                        {{form.tournament(class_="form-control")}}
+                                     </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                     <div class="form-group">
+                                                <label for="timezone">Часовой пояс</label>
+                                                    {{form.timezone(class_="form-control")}}
+                                     </div>
+                                </div>
+
+                             </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label for="add_match_area">Инофрмация о матче</label>
+                                    {{form.add_match_area(class="form-control", rows="5")}}
+                                </div>
+                            </div>
+
+                             <div class="row">
+                                 <div class="col-md-6 col-md-offset-6">
+                                    <input type="submit" class="btn btn-primary form-control" value="Сохранить" style="margin-top: 25px;">
+                                </div>
+                             </div>
+                         </form>
+                     </div>
                  </div>
-            </form>
-
+            </div>
         </div>
-
 
         <script>
             Date.prototype.toDateInputValue = (function() {
@@ -81,6 +132,7 @@
                 return local.toJSON().slice(0,10);
             });
             $("#date_start").val(new Date().toDateInputValue());
+            $("#date_start_area").val(new Date().toDateInputValue());
         </script>
     </body>
 </html>

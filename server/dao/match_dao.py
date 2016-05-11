@@ -26,4 +26,3 @@ def get_past_matches_and_bets_by_user(user_id):
         .outerjoin(Bet, and_(Bet.match_id == Match.id, Bet.user_id == user_id))\
         .filter(Match.time_start < now)\
         .all()
-
