@@ -56,9 +56,9 @@ class Bet(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), index=True)
     match_id = db.Column(db.Integer, db.ForeignKey('match.id'), index=True)
-    result = db.Column(db.Integer, index=True)
     home_team_score = db.Column(db.Integer, index=True)
     away_team_score = db.Column(db.Integer, index=True)
+    points = db.Column(db.Integer, index=True)
 
     def __init__(self, user_id, match_id, home_team_score, away_team_score):
         self.user_id = user_id
@@ -68,13 +68,3 @@ class Bet(db.Model):
 
     def __repr__(self):
         return '<Bet: {0}:{1}>'.format(self.home_team_score, self.away_team_score)
-
-
-class UserPoint(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), index=True)
-    match_id = db.Column(db.Integer, db.ForeignKey('match.id'), index=True)
-    points = db.Column(db.Integer, index=True)
-
-    def __repr__(self):
-        return '<UserPoint: user {0}, match {1}, points {2}>'.format(self.user_id, self.match_id, self.points)
