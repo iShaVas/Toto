@@ -31,3 +31,7 @@ color: white; /*BACKGROUND color for active*/
 .navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
     color: #eee;
 }
+
+.glyphicon {
+    font-size: 18px;
+}

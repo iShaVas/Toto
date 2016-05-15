@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Управление матчами</title>
+    <script src="/static/libs/jquery/jquery-2.2.3.min.js"></script>
+    <script src="/static/libs/bootstrap/js/bootstrap.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/libs/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="/static/css/header.css">
+    <link rel="stylesheet" href="/static/css/addresult.css">
+</head>
+<body>
+
+    {% include 'header.html' %}
+
+    <div class="container">
+        <h1>Добавить результат матча</h1>
+    </div>
+
+    <div class="col-lg-6 col-md-12 text-center">
+        <div class="row"><h2>Прошедшие матчи</h2></div>
+                    <table class="table table-hover">
+                    <colgroup>
+                        <col class="col-md-4">
+                        <col class="col-md-1">
+                        <col class="col-md-3">
+                        <col class="col-md-4">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th class="text-right">Домашняя команда</th>
+                            <th class="text-center">Исход</th>
+                            <th>Гостевая команда</th>
+                            <th class="text-left">Ставка</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                            {% for match in past_matches %}
+                            <tr>
+                                <td><div class="text-right"><p>{{match.Match.home_team}}</p></div></td>
+                                <td><div class="text-center">&mdash;</div></td>
+                                <td><div class="text-left"><p>{{match.Match.away_team}}</p></div></td>
+                                <td><div class="text-left match-score-column">
+                                   <input class="team-score-input" value="{{match.Bet.home_team_score}}"
+                                                   data-match-id="{{match.Match.id}}"
+                                                   id="match_{{match.Match.id}}_home"/>
+                                <span>:</span>
+                                    <input class="team-score-input" value="{{match.Bet.away_team_score}}"
+                                           data-match-id="{{match.Match.id}}"
+                                           id="match_{{match.Match.id}}_away"/>
+                                </div></td>
+                            </tr>
+                            {% endfor %}
+
+                    </tbody>
+                    </table>
+    </div>
+</body>
+</html>

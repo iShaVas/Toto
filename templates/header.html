@@ -20,10 +20,14 @@
             <ul class="nav navbar-nav navbar-right">
                 {% if current_user.role == 'ADMIN' %}
                     <li><a href="/admin">Добавить матч</a></li>
+                    <li><a>|</a></li>
+                    <li><a href="/addresult">Добавить результат матча</a></li>
                 {% endif %}
-                <li><a href="/logout">Выйти</a></li>
                 <li aria-label="Left Align">
-                    <a href="#"><span class="glyphicon glyphicon-cog"></span></a>
+                    <a href="/settings"><span class="glyphicon glyphicon-cog"></span></a>
+                </li>
+                <li>
+                    <a href="/logout"><span class="glyphicon glyphicon-log-out"></span></a>
                 </li>
             </ul>
         </div>

@@ -1,5 +1,5 @@
 from flask_wtf import Form
-from wtforms import StringField, PasswordField, SelectField, TextField, TextAreaField
+from wtforms import StringField, PasswordField, SelectField, TextField, TextAreaField, IntegerField
 from wtforms.validators import equal_to, length, DataRequired
 from wtforms.widgets import TextArea
 
@@ -30,3 +30,4 @@ class AddMatchForm(Form):
                                                                                (6, 'UTC+6'), (7, 'UTC+7'),
                                                                                (8, 'UTC+8')], default=4, coerce=int)
     add_match_area = TextAreaField('Add Match Area')
+

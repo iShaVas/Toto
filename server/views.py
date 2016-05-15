@@ -5,7 +5,8 @@ import flask_login
 from flask import render_template, redirect, url_for, jsonify
 from flask import request
 from flask_login import logout_user, current_user, login_required
-from server.dao.match_dao import add_match, get_nearest_matches_and_bets_by_user, get_past_matches_and_bets_by_user
+from server.dao.match_dao import add_match, get_nearest_matches_and_bets_by_user, get_past_matches_and_bets_by_user, \
+    add_result
 
 from server import app, login_manager
 from server.dao.bet_dao import add_new_bet
@@ -116,3 +117,16 @@ def save_bet():
 @app.route('/statistics', methods=['GET', 'POST'])
 def statistics():
     return render_template('statistics.html')
+
+
+@app.route('/addresult', methods=['GET', 'POST'])
+def add_result_match():
+    matches = get_nearest_matches_and_bets_by_user(current_user.id)
+    past_matches = get_past_matches_and_bets_by_user(current_user.id)
+    return render_template('addresult.html', user=current_user, matches=matches, past_matches=past_matches)
+
+
+@app.route('/settings')
+def settings():
+    login = get_user_by_nickname(current_user.id)
+    return render_template('settings.html', user=current_user)

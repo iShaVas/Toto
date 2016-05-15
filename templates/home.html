@@ -37,7 +37,10 @@
                     <tr>
                         {% for match in matches %}
                         <td><div class="text-right"><p>{{match.Match.home_team}}</p></div></td>
-                        <td><div class="text-center">&mdash;</div></td>
+                        <td><div class="text-center">
+                            &mdash;
+                            </div>
+                        </td>
                         <td><div class="text-left"><p>{{match.Match.away_team}}</p></div></td>
                         <td><div class="text-left match-score-column">
                             <input class="team-score-input" value="{{match.Bet.home_team_score}}"
@@ -59,27 +62,38 @@
                     <col class="col-md-4">
                     <col class="col-md-1">
                     <col class="col-md-3">
-                    <col class="col-md-4">
+                    <col class="col-md-1">
+                    <col class="col-md-3">
                 </colgroup>
                 <thead>
                     <tr>
                         <th class="text-right">Домашняя команда</th>
                         <th class="text-center">Исход</th>
                         <th>Гостевая команда</th>
-                        <th class="text-left">Ставка</th>
+                        <th class="text-center">Ставка</th>
+                        <th class="text-center">Баллы</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for match in past_matches %}
                     <tr>
                         <td><div class="text-right"><p>{{match.Match.home_team}}</p></div></td>
-                        <td><div class="text-center">&mdash;</div></td>
+                        <td>
+                            <div class="text-center">
+                            {{match.Match.home_team_score if match.Match.home_team_score is not none}}
+                            <span>:</span>
+                            {{match.Match.away_team_score if match.Match.away_team_score is not none}}
+                            </div>
+                        </td>
                         <td><div class="text-left"><p>{{match.Match.away_team}}</p></div></td>
-                        <td><div class="text-left match-score-column">
-                                <input class="team-score-input" value="{{match.Bet.home_team_score}}"/>
+                        <td>
+                            <div class="text-center match-score-column">
+                                {{match.Bet.home_team_score}}
                                     <span>:</span>
-                                <input class="team-score-input" value="{{match.Bet.away_team_score}}"/>
-                        </div></td>
+                                {{match.Bet.away_team_score}}
+                            </div>
+                        </td>
+                        <td class="text-center">{{match.Bet.points}}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
