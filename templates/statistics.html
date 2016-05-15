@@ -10,6 +10,70 @@
 </head>
 <body>
     {% include 'header.html' %}
-    <h1>Статистика</h1>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-7"> <!-- The last matches -->
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th class="text-right">Дата</th>
+                            <th class="text-right">Домашняя команда</th>
+                            <th class="text-center">Счёт</th>
+                            <th>Гостевая команда</th>
+                            {% for user in users %}
+                            <th class="text-center">{{user.nickname}}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    {% for i in range(matches_data|length) %}
+                    {% set match_data = matches_data[i] %}
+
+                    <tr>
+                        <td class="text-right get-normal-date-from-datetime">{{match_data[0].time_start}}</td>
+                        <td class="text-right">{{match_data[0].home_team}}</td>
+                        <td class="text-center">{{match_data[0].home_team_score if match_data[0].home_team_score is not none else "-"}}:{{match_data[0].away_team_score if match_data[0].away_team_score is not none else "-"}}</td>
+                        <td>{{match_data[0].away_team}}</td>
+                        {% for i in range(1, match_data|length) %}
+                        <td class="text-center">{{match_data[i].home_team_score if match_data[i].home_team_score is not none else "-"}}:{{match_data[i].away_team_score if match_data[i].away_team_score is not none else "-"}}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <div class="col-xs-2 col-xs-offset-1"> <!-- Ratings -->
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th class="text-right">Место</th>
+                            <th class="text-left">Имя</th>
+                            <th class="text-right">Счёт</th>
+                        </tr>
+                    </thead>
+                    {% for i in range(0, rating_table|length) %}
+                    {% set row = rating_table[i] %}
+                    <tr>
+                        <td class="text-right">{{i + 1}}</td>
+                        <td class="text-left">{{row.User.nickname}}</td>
+                        <td class="text-right">{{row.points}}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var months = "января, февраля, марта, апреля, мая, июня, июля, августа, сентября, октября, ноября, декабря".split(", ");
+        $( document ).ready(function() {
+            var td;
+            var str_time;
+            $('.get-normal-date-from-datetime').each(function (i){
+                str_time = $(this).text() + 'Z';
+                date = new Date(Date.parse(str_time));
+                $(this).html(date.getDate() + " " + months[date.getMonth()] + " " + date.getHours() + ":" + date.getMinutes());
+            })
+        });
+    </script>
+
 </body>
 </html>

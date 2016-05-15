@@ -8,8 +8,9 @@ from flask_login import logout_user, current_user, login_required
 from server.dao.match_dao import add_match, get_nearest_matches_and_bets_by_user, get_past_matches_and_bets_by_user
 
 from server import app, login_manager
-from server.dao.bet_dao import add_new_bet
+from server.dao.bet_dao import add_new_bet, get_points_of_users_by_tournament
 from server.dao.user_dao import register_user, get_user_by_nickname
+from server.dao.match_dao import get_past_matches_and_bets_by_tournament
 from server.forms import LoginForm
 from server.forms import RegistrationForm, AddMatchForm
 from server.models import User
@@ -105,14 +106,13 @@ def admin():
 @login_required
 def save_bet():
     data = request.form
-    bet = add_new_bet(current_user.id, int(data['matchId']), int(data['homeScoreBet']), int(data['awayScoreBet']))
-
-    return jsonify({
-        'status': 'success',
-        'betID': bet.id
-    })
+    return add_new_bet(current_user.id, int(data['matchId']), int(data['homeScoreBet']), int(data['awayScoreBet']))
 
 
 @app.route('/statistics', methods=['GET', 'POST'])
 def statistics():
-    return render_template('statistics.html')
+    users, match_user_bet = get_past_matches_and_bets_by_tournament("UCL2015")
+
+    rating_table = get_points_of_users_by_tournament("UCL2015")
+
+    return render_template('statistics.html', users=users, matches_data=match_user_bet, rating_table=rating_table)
