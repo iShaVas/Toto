@@ -52,7 +52,7 @@ def get_past_matches_and_bets_by_tournament(tournament_id):
         q = q.outerjoin(bet_alias, and_(bet_alias.match_id == Match.id, user.id == bet_alias.user_id))
 
     q = q.filter(Match.time_start < now).filter(Match.tournament == tournament_id)
-    q = q.order_by(Match.time_start)
+    q = q.order_by(Match.time_start.desc())
     q = q.all()
 
     match_user_bet = []

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="utf-8">
     <script src="/static/libs/jquery/jquery-2.2.3.min.js"></script>
@@ -12,11 +12,11 @@
     {% include 'header.html' %}
     <div class="container-fluid">
         <div class="row">
-            <div class="col-xs-7"> <!-- The last matches -->
+            <div class="col-xs-6"> <!-- The last matches -->
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th class="text-right">Дата</th>
+                            <!-- th class="text-right">Дата</th -->
                             <th class="text-right">Домашняя команда</th>
                             <th class="text-center">Счёт</th>
                             <th>Гостевая команда</th>
@@ -27,9 +27,13 @@
                     </thead>
                     {% for i in range(matches_data|length) %}
                     {% set match_data = matches_data[i] %}
-
+                    {% if i == 0 or matches_data[i][0].time_start.day != matches_data[i-1][0].time_start.day %}
+                        <tr class="text-center info">
+                            <td class="get-normal-date-from-datetime" colspan="8">{{ match_data[0].time_start }}</td>
+                        </tr>
+                    {% endif %}
                     <tr>
-                        <td class="text-right get-normal-date-from-datetime">{{match_data[0].time_start}}</td>
+                        <!-- td class="text-right get-normal-datetime-from-datetime">{{match_data[0].time_start}}</td -->
                         <td class="text-right">{{match_data[0].home_team}}</td>
                         <td class="text-center">{{match_data[0].home_team_score if match_data[0].home_team_score is not none else "-"}}:{{match_data[0].away_team_score if match_data[0].away_team_score is not none else "-"}}</td>
                         <td>{{match_data[0].away_team}}</td>
@@ -40,7 +44,7 @@
                     {% endfor %}
                 </table>
             </div>
-            <div class="col-xs-2 col-xs-offset-1"> <!-- Ratings -->
+            <div class="col-xs-2 col-xs-offset-2"> <!-- Ratings -->
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -67,12 +71,29 @@
         $( document ).ready(function() {
             var td;
             var str_time;
+            $('.get-normal-datetime-from-datetime').each(function (i){
+                str_time = $(this).text() + 'Z';
+                date = new Date(Date.parse(str_time));
+                $(this).html(getDateText(date));
+            })
             $('.get-normal-date-from-datetime').each(function (i){
                 str_time = $(this).text() + 'Z';
                 date = new Date(Date.parse(str_time));
-                $(this).html(date.getDate() + " " + months[date.getMonth()] + " " + date.getHours() + ":" + date.getMinutes());
+                $(this).html(date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear());
             })
         });
+
+        function getDateText(date){
+            s = date.getDate() + " " + months[date.getMonth()] + " ";
+
+            hours = date.getHours();
+            if (hours < 10) {s += '0' + hours + ":"} else {s += hours + ":"};
+
+            mins = date.getMinutes();
+            if (mins < 10) {s += '0' + mins} else {s += mins};
+
+            return s;
+        }
     </script>
 
 </body>

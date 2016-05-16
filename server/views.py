@@ -80,7 +80,7 @@ def admin():
             strings = form.add_match_area.data.split("\r\n")
             for string in strings:
                 if string != '':
-                    r = re.search('(\d\d:\d\d)\s+\"([\w\d\s]+)\"\s+-\s+\"([\w\d\s]+)\"', string)
+                    r = re.search('(\d\d:\d\d)\s+\"?([\w\d\s]+)\"?\s+-\s+\"?([\w\d\s]+)\"?', string)
                     if r is not None:
                         home_team = r.group(2)
                         away_team = r.group(3)
@@ -90,6 +90,8 @@ def admin():
                         date = date.replace(hour=time.hour, minute=time.minute)
                         date = date - datetime.timedelta(hours=form.timezone.data)
                         add_match(form.tournament.data, home_team, away_team, date)
+                    else:
+                        print("Cannot add this string: " + string)
             return redirect('/admin')
         if form.validate():
             date = datetime.datetime.strptime(form.date_start.data, '%Y-%m-%d')

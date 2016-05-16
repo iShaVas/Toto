@@ -19,7 +19,7 @@
             <div class="col-lg-6 col-md-12 text-center">
                 <div class="row"><h2>Ближайшие матчи</h2></div>
             <table class="table table-hover">
-               <colgroup>
+                <colgroup>
                     <col class="col-md-4">
                     <col class="col-md-1">
                     <col class="col-md-3">
@@ -34,8 +34,9 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% for match in matches %}
                     <tr>
-                        {% for match in matches %}
+
                         <td><div class="text-right"><p>{{match.Match.home_team}}</p></div></td>
                         <td><div class="text-center">&mdash;</div></td>
                         <td><div class="text-left"><p>{{match.Match.away_team}}</p></div></td>
@@ -46,8 +47,9 @@
                             <input class="team-score-input" value="{{match.Bet.away_team_score}}"
                                data-match-id="{{match.Match.id}}" id="match_{{match.Match.id}}_away"/>
                         </div></td>
-                        {% endfor %}
+
                     </tr>
+                    {% endfor %}
             </tbody>
         </table>
             </div>
