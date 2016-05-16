@@ -9,8 +9,9 @@ from server.dao.match_dao import add_match, get_nearest_matches_and_bets_by_user
     add_result
 
 from server import app, login_manager
-from server.dao.bet_dao import add_new_bet
+from server.dao.bet_dao import add_new_bet, get_points_of_users_by_tournament
 from server.dao.user_dao import register_user, get_user_by_nickname
+from server.dao.match_dao import get_past_matches_and_bets_by_tournament
 from server.forms import LoginForm
 from server.forms import RegistrationForm, AddMatchForm
 from server.models import User
@@ -80,7 +81,7 @@ def admin():
             strings = form.add_match_area.data.split("\r\n")
             for string in strings:
                 if string != '':
-                    r = re.search('(\d\d:\d\d)\s+\"([\w\d\s]+)\"\s+-\s+\"([\w\d\s]+)\"', string)
+                    r = re.search('(\d\d:\d\d)\s+\"?([\w\d\s]+)\"?\s+-\s+\"?([\w\d\s]+)\"?', string)
                     if r is not None:
                         home_team = r.group(2)
                         away_team = r.group(3)
@@ -90,6 +91,8 @@ def admin():
                         date = date.replace(hour=time.hour, minute=time.minute)
                         date = date - datetime.timedelta(hours=form.timezone.data)
                         add_match(form.tournament.data, home_team, away_team, date)
+                    else:
+                        print("Cannot add this string: " + string)
             return redirect('/admin')
         if form.validate():
             date = datetime.datetime.strptime(form.date_start.data, '%Y-%m-%d')
@@ -106,17 +109,16 @@ def admin():
 @login_required
 def save_bet():
     data = request.form
-    bet = add_new_bet(current_user.id, int(data['matchId']), int(data['homeScoreBet']), int(data['awayScoreBet']))
-
-    return jsonify({
-        'status': 'success',
-        'betID': bet.id
-    })
+    return add_new_bet(current_user.id, int(data['matchId']), int(data['homeScoreBet']), int(data['awayScoreBet']))
 
 
 @app.route('/statistics', methods=['GET', 'POST'])
 def statistics():
-    return render_template('statistics.html')
+    users, match_user_bet = get_past_matches_and_bets_by_tournament("UCL2015")
+
+    rating_table = get_points_of_users_by_tournament("UCL2015")
+
+    return render_template('statistics.html', users=users, matches_data=match_user_bet, rating_table=rating_table)
 
 
 @app.route('/addresult', methods=['GET', 'POST'])

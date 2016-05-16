@@ -7,5 +7,6 @@ def register_user(first_name, last_name, email, nickname, password):
     db.session.add(user)
     db.session.commit()
 
+
 def get_user_by_nickname(nickname):
-    return User.query.filter(User.nickname==nickname).first()
+    return User.query.filter(User.nickname == nickname).first()
