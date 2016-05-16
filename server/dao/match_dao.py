@@ -34,9 +34,10 @@ def get_past_matches_and_bets_by_user(user_id):
         .all()
 
 
-def add_result(away_team_score, home_team_score):
-    match = models.Match(away_team_score=away_team_score, home_team_score=home_team_score)
-    db.session.add(match)
+def add_result(match_id, away_team_score, home_team_score):
+    match = Match.query.filter(Match.id == match_id).first()
+    match.home_team_score = home_team_score
+    match.away_team_score = away_team_score
     db.session.commit()
 
 

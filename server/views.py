@@ -112,6 +112,14 @@ def save_bet():
     return add_new_bet(current_user.id, int(data['matchId']), int(data['homeScoreBet']), int(data['awayScoreBet']))
 
 
+@app.route('/save_match_result', methods=['GET', 'POST'])
+def save_match_result():
+    if current_user.role != 'ADMIN':
+        return None
+    data = request.form
+    return add_result(int(data['matchId']), int(data['homeScoreBet']), int(data['awayScoreBet']))
+
+
 @app.route('/statistics', methods=['GET', 'POST'])
 def statistics():
     users, match_user_bet = get_past_matches_and_bets_by_tournament("UCL2015")
