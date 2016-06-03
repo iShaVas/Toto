@@ -1,0 +1,14 @@
+        .bet-points {
+            border-radius: 50%;
+            width: 20px;
+            text-align: center;
+            border-color: #337AB7;
+            display: inline-block;
+            background-color: #337AB7;
+            color: white;
+            font-weight: bold;
+        }
+
+        .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+        vertical-align: middle;
+        }

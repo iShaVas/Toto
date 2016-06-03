@@ -126,6 +126,7 @@ def statistics():
 
     rating_table = get_points_of_users_by_tournament("UCL2015")
 
+
     return render_template('statistics.html', users=users, matches_data=match_user_bet, rating_table=rating_table)
 
 

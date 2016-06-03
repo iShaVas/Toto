@@ -38,10 +38,11 @@ def add_new_bet(user_id, match_id, home_score, away_score):
 
 
 def get_points_of_users_by_tournament(tournament_id):
-    return db.session.query(User, func.sum(Bet.points).label("points"), Match)\
-        .outerjoin(Bet, Bet.user_id == User.id)\
-        .outerjoin(Match, Bet.match_id == Match.id)\
-        .filter(Match.tournament == tournament_id)\
-        .group_by(Bet.user_id)\
-        .order_by(func.sum(Bet.points).desc())\
+    return db.session.query(User, func.sum(Bet.points).label("points"), Match) \
+        .outerjoin(Bet, Bet.user_id == User.id) \
+        .outerjoin(Match, Bet.match_id == Match.id) \
+        .filter(Match.tournament == tournament_id) \
+        .group_by(Bet.user_id) \
+        .order_by(func.sum(Bet.points).desc()) \
         .all()
+

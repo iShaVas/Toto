@@ -6,6 +6,7 @@
     <script src="/static/libs/bootstrap/js/bootstrap.js"></script>
     <link rel="stylesheet" type="text/css" href="/static/libs/bootstrap/css/bootstrap.css">
     <link rel="stylesheet" href="/static/css/header.css">
+    <link rel="stylesheet" href="/static/css/style.css">
     <title>statistics</title>
 </head>
 <body>
@@ -35,10 +36,17 @@
                     <tr>
                         <!-- td class="text-right get-normal-datetime-from-datetime">{{match_data[0].time_start}}</td -->
                         <td class="text-right">{{match_data[0].home_team}}</td>
-                        <td class="text-center">{{match_data[0].home_team_score if match_data[0].home_team_score is not none else "-"}}:{{match_data[0].away_team_score if match_data[0].away_team_score is not none else "-"}}</td>
+                        <td class="text-center">
+                            {{match_data[0].home_team_score if match_data[0].home_team_score is not none else "-"}}:{{match_data[0].away_team_score if match_data[0].away_team_score is not none else "-"}}
+                        </td>
                         <td>{{match_data[0].away_team}}</td>
                         {% for i in range(1, match_data|length) %}
-                        <td class="text-center">{{match_data[i].home_team_score if match_data[i].home_team_score is not none else "-"}}:{{match_data[i].away_team_score if match_data[i].away_team_score is not none else "-"}}</td>
+                        <td class="text-center">
+                            {{match_data[i].home_team_score if match_data[i].home_team_score is not none else "-"}}:{{match_data[i].away_team_score if match_data[i].away_team_score is not none else "-"}}<br>
+                            {% if match_data[i] is not none%}
+                            <div class="bet-points">{{match_data[i].points}}</div>
+                            {% endif %}
+                        </td>
                         {% endfor %}
                     </tr>
                     {% endfor %}
