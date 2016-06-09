@@ -10,6 +10,7 @@ from server.dao.match_dao import add_match, get_nearest_matches_and_bets_by_user
 
 from server import app, login_manager
 from server.dao.bet_dao import add_new_bet, get_points_of_users_by_tournament
+from server.dao.tournament_dao import get_all_tournaments
 from server.dao.user_dao import register_user, get_user_by_nickname
 from server.dao.match_dao import get_past_matches_and_bets_by_tournament
 from server.forms import LoginForm
@@ -122,9 +123,9 @@ def save_match_result():
 
 @app.route('/statistics', methods=['GET', 'POST'])
 def statistics():
-    users, match_user_bet = get_past_matches_and_bets_by_tournament("UCL2015")
+    users, match_user_bet = get_past_matches_and_bets_by_tournament("EURO2016")
 
-    rating_table = get_points_of_users_by_tournament("UCL2015")
+    rating_table = get_points_of_users_by_tournament("EURO2016")
 
 
     return render_template('statistics.html', users=users, matches_data=match_user_bet, rating_table=rating_table)

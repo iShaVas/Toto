@@ -3,6 +3,8 @@ from wtforms import StringField, PasswordField, SelectField, TextField, TextArea
 from wtforms.validators import equal_to, length, DataRequired
 from wtforms.widgets import TextArea
 
+from server.dao.tournament_dao import get_all_tournaments
+
 
 class RegistrationForm(Form):
     first_name = StringField('First Name', validators=[DataRequired()], _name='first_name')
@@ -19,8 +21,8 @@ class LoginForm(Form):
 
 
 class AddMatchForm(Form):
-    tournament = SelectField('Tournament', validators=[DataRequired()], choices=[('UCL2015', 'UCL2015')],
-                             default='UCL2015')
+    tournament = SelectField('Tournament', validators=[DataRequired()], choices=get_all_tournaments(),
+                             default='EURO2016')
     home_team = StringField('Home Team', validators=[DataRequired()])
     away_team = StringField('Away Team', validators=[DataRequired()])
     time_start = StringField('Time Start', validators=[DataRequired()])
