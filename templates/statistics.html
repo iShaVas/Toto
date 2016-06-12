@@ -69,7 +69,8 @@
                         <td class="text-right">{{i + 1}}</td>
                         <td class="text-left">{{row.User.nickname}}</td>
                         <td class="text-right">
-                            {% if row.points is not none %}
+                            {% if row.points is none %}0
+                            {% else %}
                                 {{row.points}}
                             {% endif %}
                         </td>
