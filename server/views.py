@@ -32,11 +32,13 @@ def index():
 
 
 @app.route('/home')
-@login_required
 def home():
-    matches = get_nearest_matches_and_bets_by_user(current_user.id)
-    past_matches = get_past_matches_and_bets_by_user(current_user.id)
-    return render_template('home.html', user=current_user, matches=matches, past_matches=past_matches)
+    if current_user.is_authenticated:
+        matches = get_nearest_matches_and_bets_by_user(current_user.id)
+        past_matches = get_past_matches_and_bets_by_user(current_user.id)
+        return render_template('home.html', user=current_user, matches=matches, past_matches=past_matches)
+
+    return redirect('/login')
 
 
 @app.route('/register', methods=['GET', 'POST'])
