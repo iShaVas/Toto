@@ -6,8 +6,6 @@
     <script src="/static/libs/jquery/jquery-2.2.3.min.js"></script>
     <script src="/static/libs/bootstrap/js/bootstrap.js"></script>
     <link rel="stylesheet" type="text/css" href="/static/libs/bootstrap/css/bootstrap.css">
-
-    <script src="/static/js/common.js"></script>
     <link rel="stylesheet" href="/static/css/header.css">
     <link rel="stylesheet" href="/static/css/home.css">
     <link rel="stylesheet" href="/static/css/style.css">
@@ -23,32 +21,34 @@
                 <div class="row"><h2>Ближайшие матчи</h2></div>
             <table class="table table-hover">
                 <colgroup>
-                    <col class="col-md-4">
+                    <col class="col-md-2">
+                    <col class="col-md-3">
                     <col class="col-md-1">
                     <col class="col-md-3">
-                    <col class="col-md-4">
+                    <col class="col-md-3">
                 </colgroup>
                 <thead>
                     <tr>
+                        <th class="text-left">Дата начала</th>
                         <th class="text-right">Домашняя команда</th>
-                        <th class="text-center"></th>
+                        <th class="text-center">Исход</th>
                         <th>Гостевая команда</th>
                         <th class="text-left">Ставка</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for i in range (matches|length) %}
-                    {% set match = matches[i] %}
-                    {% if i == 0 or matches[i].Match.time_start.day != matches[i-1].Match.time_start.day %}
-                        <tr class="text-center info">
-                            <td class="get-normal-date-from-datetime" colspan="8">{{ match.Match.time_start }}</td>
-                        </tr>
-                    {% endif %}
+                    {% for match in matches %}
                     <tr>
-
-                        <td><div class="text-right">
-                            <div class="team">{{match.Match.home_team}}</div>
-                        </div></td>
+                        <td>
+                            <div class="text-left">
+                                {{ match.Match.time_start.strftime('%m.%d %H:%M') }}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="text-right">
+                                <div class="team">{{match.Match.home_team}}</div>
+                            </div>
+                        </td>
                         <td><div class="score">
                             &mdash;
                             </div>
@@ -90,13 +90,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for i in range (past_matches|length) %}
-                    {% set match = past_matches[i] %}
-                    {% if i == 0 or past_matches[i].Match.time_start.day != past_matches[i-1].Match.time_start.day %}
-                        <tr class="text-center info">
-                            <td class="get-normal-date-from-datetime" colspan="8">{{ match.Match.time_start }}</td>
-                        </tr>
-                    {% endif %}
+                    {% for match in past_matches %}
                     <tr>
                         <td><div class="text-right">
                             <div class="team">{{match.Match.home_team}}</div>
@@ -113,18 +107,16 @@
                         </div></td>
                         <td>
                             <div class="text-center match-score-column">
-                                {% if match.Bet is not none %}
-                                    {{match.Bet.home_team_score}}
-                                        <span>:</span>
-                                    {{match.Bet.away_team_score}}
-                                {% else %}
-                                    <span>—</span>
-                                {% endif %}
+                                {{match.Bet.home_team_score}}
+                                    <span>:</span>
+                                {{match.Bet.away_team_score}}
                             </div>
                         </td>
-                        <td class="text-center">
-                            {% if match.Bet is not none and match.Bet.points is not none %}
-                            <div class="bet-points">{{match.Bet.points}}</div>
+                        <td class="text-center" style=" padding-left: 11%;">
+                            {% if match.Bet is not none %}
+                                {% if match.Bet.points is not none %}
+                                <div class="bet-points">{{match.Bet.points}}</div>
+                                {% endif %}
                             {% endif %}
                         </td>
                     </tr>
