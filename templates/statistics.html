@@ -56,7 +56,12 @@
                         <td>{{match_data[0].away_team}}</td>
                         {% for i in range(1, match_data|length) %}
                         <td class="text-center">
-                            {{match_data[i].home_team_score if match_data[i].home_team_score is not none else "-"}}:{{match_data[i].away_team_score if match_data[i].away_team_score is not none else "-"}}<br>
+                            {% if match_data[i] is not none %}
+                                {{match_data[i].home_team_score}}:{{match_data[i].away_team_score}}
+                            {% else %}
+                                —
+                            {% endif %}
+                            <br>
                             {% if match_data[i] is not none %}
                                 {% if match_data[i].points is not none %}
                                     <div class="bet-points">{{match_data[i].points}}</div>
