@@ -1,7 +1,3 @@
-$(".team-score-input").keypress(function (e) {
-    if (String.fromCharCode(e.keyCode).match(/[^0-9]/g)) return false;
-});
-
 $(".team-score-input").change(function(){
     var matchId = $(this).attr('data-match-id');
     var homeScoreBet = parseInt($('#match_' + matchId + '_home').val())

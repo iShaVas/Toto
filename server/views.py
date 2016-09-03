@@ -2,7 +2,7 @@ import datetime
 import re
 
 import flask_login
-from flask import render_template, redirect, url_for, jsonify
+from flask import render_template, redirect, url_for
 from flask import request
 from flask_login import logout_user, current_user, login_required
 from server.dao.match_dao import add_match, get_nearest_matches_and_bets_by_user, get_past_matches_and_bets_by_user, \
@@ -48,7 +48,7 @@ def register():
     if form.validate_on_submit():
         register_user(form.first_name.data, form.last_name.data, form.email.data, form.nickname.data,
                       form.password.data)
-        return render_template('register_success.html')
+        return redirect('/login')
 
     return render_template('register.html', form=form)
 
