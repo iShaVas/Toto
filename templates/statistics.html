@@ -9,12 +9,29 @@
     <script src="/static/js/common.js"></script>
     <link rel="stylesheet" href="/static/css/header.css">
     <link rel="stylesheet" href="/static/css/style.css">
-    <title>statistics</title>
+    <title>Статистика</title>
 </head>
 <body>
     {% include 'header.html' %}
     <div class="container-fluid">
+        <form class="tournament-name form-inline" method="POST" action="/statistics" name="tournament-name">
+              <div class="form-group">
+                <div class="input-group">
+                    <select name="select-tournament" class='select-tournament form control' >
+                        {% for t in range(tournaments|length) %}
+                            {% set tournament = tournaments[t] %}
+                            <option value="/statistics/{{tournament[0]}}"
+                                    {{ 'selected="selected"' if tournament[0]==current_tournament.name }}>
+                                {{tournament[1]}}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+              </div>
+        </form>
+             <div class="text-center"><h2>{{current_tournament.name_full}}</h2></div>
         <div class="row">
+
             <div class="col-xs-6"> <!-- The last matches -->
                 <table class="table table-striped">
                     <thead>
@@ -82,5 +99,6 @@
         </div>
     </div>
 
+    <script src="/static/js/statistic.js"></script>
 </body>
 </html>

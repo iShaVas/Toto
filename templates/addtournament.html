@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавить турнир</title>
+    <script src="/static/libs/jquery/jquery-2.2.3.min.js"></script>
+    <script src="/static/libs/bootstrap/js/bootstrap.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/libs/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="/static/css/header.css">
+</head>
+<body>
+    {% include 'header.html' %}
+    <div class="container-fluid">
+        <form action="/addtournament" method="post" style="width: 300px" name="add-tournament" class="center-block">
+            <div class="row">
+                    <h2 class="text-center">Добавить новый турнир</h2>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label for="name">Название турнира</label>
+                            {{form.name(class="form-control")}}
+                        </div>
+                    </div>
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label for="name">Полное название турнира</label>
+                            {{form.name_full(class="form-control")}}
+                        </div>
+                    </div>
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label for="date_start">Дата начала</label>
+                            {{form.date_start(class="form-control", type="date")}}
+                        </div>
+                    </div>
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label for="date_end">Дата завершения</label>
+                            {{form.date_end(class="form-control", type="date")}}
+                        </div>
+                    </div>
+                    <div class="col-xs-12">
+                        <input class="btn btn-primary form-control" type="submit" value="Добавить турнир">
+                    </div>
+                </div>
+        </form>
+    </div>
+</body>
+</html>

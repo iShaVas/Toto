@@ -59,7 +59,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="timezone">Часовой пояс</label>
-                                            {{form.timezone(class_="form-control")}}
+                                            {{form.timezone(class="form-control")}}
                                     </div>
                                 </div>
                             </div>
@@ -69,10 +69,16 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="tournament">Турнир</label>
-                                        {{form.tournament(class_="form-control")}}
+                                        {{form.tournament(class="form-control")}}
                                     </div>
                                 </div>
-                                <div class="col-md-6 col-md-offset-2" style="padding-top: 25px">
+                                <div class="col-md-1">
+
+                                        <a href="/addtournament"><span class="glyphicon glyphicon-plus"
+                                                                       style="padding-top: 30px;"></span></a>
+
+                                </div>
+                                <div class="col-md-5 col-md-offset-2" style="padding-top: 25px">
                                     <input type="submit" class="btn btn-primary form-control" value="Сохранить">
                                 </div>
                             </div>
