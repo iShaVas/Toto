@@ -105,11 +105,9 @@
                     <tr>
                         <td class="text-right">{{i + 1}}</td>
                         <td class="text-left">{{row.User.nickname}}</td>
-                        <td class="text-left">{{(row.points / row.count)|round(2, 'floor')}}</td>
+                        <td class="text-left">{{(row.points|int / row.count)|round(2, 'floor') if row.count > 0 else ""}}</td>
                         <td class="text-right">
-                            <b>{% if row.points is not none %}
-                                {{row.points}}
-                            {% endif %}</b>
+                            <b>{{row.points if row.points is not none else "0"}}</b>
                         </td>
                     </tr>
                     {% endfor %}
