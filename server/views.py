@@ -10,9 +10,11 @@ from server.dao.match_dao import add_match, get_nearest_matches_and_bets_by_user
 
 from server import app, login_manager
 from server.dao.bet_dao import add_new_bet, get_points_of_users_by_tournament
+from server.dao.tournament_dao import get_all_tournaments, add_tournament, get_last_tournament, \
+    get_name_full_tournament_by_name
 from server.dao.user_dao import register_user, get_user_by_nickname
 from server.dao.match_dao import get_past_matches_and_bets_by_tournament
-from server.forms import LoginForm
+from server.forms import LoginForm, AddTournamentForm
 from server.forms import RegistrationForm, AddMatchForm
 from server.models import User
 
@@ -77,7 +79,7 @@ def logout():
 def admin():
     if current_user.role != 'ADMIN':
         return redirect('/')
-    form = AddMatchForm()
+    form = AddMatchForm.new()
     if form.is_submitted():
         if form.add_match_area.data != '':
             strings = form.add_match_area.data.split("\r\n")
@@ -123,12 +125,19 @@ def save_match_result():
 
 
 @app.route('/statistics', methods=['GET', 'POST'])
-def statistics():
-    users, match_user_bet = get_past_matches_and_bets_by_tournament("EURO2016")
+def statistics_default():
+    return statistics(get_last_tournament().name)
 
-    rating_table = get_points_of_users_by_tournament("EURO2016")
 
-    return render_template('statistics.html', users=users, matches_data=match_user_bet, rating_table=rating_table)
+@app.route('/statistics/<tournament_name>', methods=['GET', 'POST'])
+@login_required
+def statistics(tournament_name):
+    tournaments = get_all_tournaments()
+    current_tournament = get_name_full_tournament_by_name(tournament_name)
+    users, match_user_bet = get_past_matches_and_bets_by_tournament(tournament_name)
+    rating_table = get_points_of_users_by_tournament(tournament_name)
+    return render_template('statistics.html', users=users, matches_data=match_user_bet, rating_table=rating_table,
+                           tournaments=tournaments, current_tournament=current_tournament)
 
 
 @app.route('/addresult', methods=['GET', 'POST'])
@@ -142,3 +151,18 @@ def add_result_match():
 def settings():
     login = get_user_by_nickname(current_user.id)
     return render_template('settings.html', user=current_user)
+
+
+@app.route('/addtournament', methods=['GET', 'POST'])
+@login_required
+def add_new_tournament():
+    if current_user.role != 'ADMIN':
+        return redirect('/')
+
+    form = AddTournamentForm()
+
+    if form.validate_on_submit():
+        add_tournament(form.name.data, form.name_full.data, form.date_start.data, form.date_end.data)
+        return redirect('/admin')
+
+    return render_template('addtournament.html', form=form)

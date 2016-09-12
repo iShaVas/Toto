@@ -1,8 +1,6 @@
 from flask_wtf import Form
-from wtforms import StringField, PasswordField, SelectField, TextField, TextAreaField, IntegerField
+from wtforms import StringField, PasswordField, SelectField, TextAreaField, DateField
 from wtforms.validators import equal_to, length, DataRequired
-from wtforms.widgets import TextArea
-
 from server.dao.tournament_dao import get_all_tournaments
 
 
@@ -21,8 +19,7 @@ class LoginForm(Form):
 
 
 class AddMatchForm(Form):
-    tournament = SelectField('Tournament', validators=[DataRequired()], choices=get_all_tournaments(),
-                             default='EURO2016')
+    tournament = SelectField('Tournament', validators=[DataRequired()], coerce=str)
     home_team = StringField('Home Team', validators=[DataRequired()])
     away_team = StringField('Away Team', validators=[DataRequired()])
     time_start = StringField('Time Start', validators=[DataRequired()])
@@ -33,3 +30,17 @@ class AddMatchForm(Form):
                                                                                (8, 'UTC+8')], default=3, coerce=int)
     add_match_area = TextAreaField('Add Match Area')
 
+    @classmethod
+    def new(cls):
+        form = cls()
+        tournaments = get_all_tournaments()
+        form.tournament.choices = tournaments
+        form.tournament.default = tournaments[-1][0]
+        return form
+
+
+class AddTournamentForm(Form):
+    name = StringField('Tournament Name', validators=[DataRequired()], _name='name')
+    name_full = StringField('Tournament Name Full', validators=[DataRequired()], _name='name')
+    date_start = DateField('Date Start', validators=[DataRequired()])
+    date_end = DateField('Date End', validators=[DataRequired()])

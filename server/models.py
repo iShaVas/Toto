@@ -43,8 +43,9 @@ class Match(db.Model):
 
 
 class Tournament(db.Model):
-    id = db.Column(db.String(64), primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), index=True)
+    name_full = db.Column(db.String(128), index=True)
     date_start = db.Column(db.DateTime, index=True)
     date_end = db.Column(db.DateTime, index=True)
 
