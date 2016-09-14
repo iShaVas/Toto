@@ -27,7 +27,7 @@ function getDateText(date){
     return s;
 };
 
-
+/*
 $(".team-score-input").keydown(function(e) {
     if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
              // Allow: Ctrl+A
@@ -61,3 +61,4 @@ $('.team-score-input').on('focus', function (e) {
         })
         .select();
 });
+*/
