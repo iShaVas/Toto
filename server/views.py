@@ -9,7 +9,8 @@ from server.dao.match_dao import add_match, get_nearest_matches_and_bets_by_user
     add_result
 
 from server import app, login_manager
-from server.dao.bet_dao import add_new_bet, get_points_of_users_by_tournament
+from server.dao.bet_dao import add_new_bet, get_points_of_users_by_tournament, \
+    get_points_of_users_by_tournament_last_day
 from server.dao.tournament_dao import get_all_tournaments, add_tournament, get_last_tournament, \
     get_name_full_tournament_by_name
 from server.dao.user_dao import register_user, get_user_by_nickname
@@ -136,8 +137,10 @@ def statistics(tournament_name):
     current_tournament = get_name_full_tournament_by_name(tournament_name)
     users, match_user_bet = get_past_matches_and_bets_by_tournament(tournament_name)
     rating_table = get_points_of_users_by_tournament(tournament_name)
+    last_day_points = get_points_of_users_by_tournament_last_day(tournament_name)
     return render_template('statistics.html', users=users, matches_data=match_user_bet, rating_table=rating_table,
-                           tournaments=tournaments, current_tournament=current_tournament)
+                           tournaments=tournaments, current_tournament=current_tournament,
+                           last_day_points=last_day_points)
 
 
 @app.route('/addresult', methods=['GET', 'POST'])

@@ -47,3 +47,15 @@ def get_points_of_users_by_tournament(tournament_id):
         .order_by(func.sum(Bet.points).desc(), func.count(Bet.points)) \
         .all()
 
+
+def get_points_of_users_by_tournament_last_day(tournament_id):
+    last_match_time = db.session.query(Match.time_start).order_by(Match.time_start.desc()).first()
+    return db.session.query(User, func.sum(Bet.points).label("points"), Match) \
+        .outerjoin(Bet, Bet.user_id == User.id) \
+        .outerjoin(Match, Bet.match_id == Match.id) \
+        .filter(Match.tournament == tournament_id) \
+        .filter(Match.time_start > last_match_time.time_start - datetime.timedelta(hours=12)) \
+        .filter(Bet.points is not None) \
+        .group_by(Bet.user_id) \
+        .order_by(func.sum(Bet.points).desc(), func.count(Bet.points)) \
+        .all()

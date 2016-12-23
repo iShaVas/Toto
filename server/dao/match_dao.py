@@ -1,5 +1,6 @@
 import datetime
 
+import math
 from sqlalchemy import and_
 from sqlalchemy.orm import aliased
 from sqlalchemy.sql.operators import as_
@@ -66,7 +67,7 @@ def get_past_matches_and_bets_by_tournament(tournament_id):
         q = q.outerjoin(bet_alias, and_(bet_alias.match_id == Match.id, user.id == bet_alias.user_id))
 
     q = q.filter(Match.time_start < now).filter(Match.tournament == tournament_id)
-    q = q.order_by(Match.time_start.desc())
+    q = q.order_by(Match.time_start.desc(), Match.id)
     q = q.all()
 
     match_user_bet = []
@@ -106,7 +107,7 @@ def calculate_user_points(match_home_score, match_away_score, bet_home_score, be
         if match_home_score - match_away_score == bet_home_score - bet_away_score:
             points += 4
 
-            if match_home_score - match_away_score >= 3:
+            if math.fabs(match_home_score - match_away_score) >= 3:
                 points += 1
 
         if abs((match_home_score - match_away_score) - (bet_home_score - bet_away_score)) == 1:

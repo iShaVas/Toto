@@ -15,10 +15,27 @@
             border: 2px solid #A8A8A8;
             padding: 10px;
             position: fixed;
-            left: 50%;
+            right: 20%;
+            margin-top: 180px;
         }
         .rating-table > .table {
             margin-bottom: 5px;
+        }
+        .last-day-points-table {
+            border: 2px solid #A8A8A8;
+            padding: 10px;
+            position: fixed;
+            right: 20%;
+
+        }
+        .last-day-points-table > .table {
+            margin-bottom: 5px;
+        }
+        caption {
+            padding-top: 4px;
+            padding-bottom: 4px;
+            color: #333;
+            text-align: center;
         }
     </style>
 
@@ -66,15 +83,19 @@
                     {% endif %}
                     <tr>
                         <!-- td class="text-right get-normal-datetime-from-datetime">{{match_data[0].time_start}}</td -->
-                        <td class="text-right">{{match_data[0].home_team}}</td>
+                        <td class="text-right">{{match_data[0].home_team if match_data[0].home_team.istitle() else match_data[0].home_team.title()}}</td>
                         <td class="text-center">
                             {{match_data[0].home_team_score if match_data[0].home_team_score is not none else "-"}}:{{match_data[0].away_team_score if match_data[0].away_team_score is not none else "-"}}
                         </td>
-                        <td>{{match_data[0].away_team}}</td>
+                        <td>{{match_data[0].away_team if match_data[0].away_team.istitle() else match_data[0].away_team.title()}}</td>
                         {% for i in range(1, match_data|length) %}
                         <td class="text-center">
                             {% if match_data[i] is not none %}
-                                {{match_data[i].home_team_score}}:{{match_data[i].away_team_score}}
+                                {% if match_data[i].home_team_score is not none %}
+                                    {{match_data[i].home_team_score}}:{{match_data[i].away_team_score}}
+                                {% else %}
+                                    —
+                                {% endif %}
                             {% else %}
                                 —
                             {% endif %}
@@ -90,8 +111,13 @@
                     {% endfor %}
                 </table>
             </div>
-            <div class="col-xs-2 col-xs-offset-2 rating-table"> <!-- Ratings -->
+            <div>
+
+            <div class="col-xs-2 col-xs-offset-2 rating-table" style="
+    margin-top: 0px;
+"> <!-- Ratings -->
                 <table class="table table-striped">
+                    <caption>Общий рейтинг</caption>
                     <thead>
                         <tr>
                             <th class="text-right">Место</th>
@@ -115,6 +141,35 @@
                 <small>*Среднее количество очков за каждый прогноз</small>
 
             </div>
+
+                {% if last_day_points|length > 0 %}
+            <div class="col-xs-2 col-xs-offset-2 last-day-points-table" style="margin-top: 280px;"> <!-- Last day points -->
+                <table class="table table-striped">
+                    <caption>Рейтинг за последний игровой день</caption>
+                    <thead>
+                        <tr>
+                            <th class="text-right">Место</th>
+                            <th class="text-left">Имя</th>
+                            <th class="text-right">Счёт</th>
+                        </tr>
+                    </thead>
+                    {% for o in range(0, last_day_points|length) %}
+                    {% set row = last_day_points[o] %}
+                    <tr>
+                        <td class="text-right">{{o + 1}}</td>
+                        <td class="text-left">{{row.User.nickname}}</td>
+                        <td class="text-right">
+                            <b>{{row.points if row.points is not none else "0"}}</b>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+
+            </div>
+                {% endif %}
+
+                </div>
+
         </div>
     </div>
 
