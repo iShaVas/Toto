@@ -25,7 +25,7 @@ def add_new_bet(user_id, match_id, home_score, away_score):
         bet.home_team_score = home_score
         bet.away_team_score = away_score
     else:
-        bet = Bet(user_id, match_id, home_score, away_score)
+        bet = Bet(user_id, match_id, home_score, away_score, 1.5)
         db.session.add(bet)
         db.session.flush()
 
@@ -38,7 +38,7 @@ def add_new_bet(user_id, match_id, home_score, away_score):
 
 
 def get_points_of_users_by_tournament(tournament_id):
-    return db.session.query(User, func.count(Bet.points).label('count'), func.sum(Bet.points).label("points"), Match) \
+    return db.session.query(User, func.count(Bet.total_points).label('count'), func.sum(Bet.total_points).label("total_points"), Match) \
         .outerjoin(Bet, Bet.user_id == User.id) \
         .outerjoin(Match, Bet.match_id == Match.id) \
         .filter(Match.tournament == tournament_id) \
@@ -49,8 +49,8 @@ def get_points_of_users_by_tournament(tournament_id):
 
 
 def get_points_of_users_by_tournament_last_day(tournament_id):
-    last_match_time = db.session.query(Match.time_start).order_by(Match.time_start.desc()).first()
-    return db.session.query(User, func.sum(Bet.points).label("points"), Match) \
+    last_match_time = db.session.query(Match.time_start).order_by(Match.time_start.desc()).filter(Match.time_start < datetime.datetime.now()).first()
+    return db.session.query(User, func.sum(Bet.total_points).label("total_points"), Match) \
         .outerjoin(Bet, Bet.user_id == User.id) \
         .outerjoin(Match, Bet.match_id == Match.id) \
         .filter(Match.tournament == tournament_id) \

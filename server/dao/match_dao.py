@@ -44,7 +44,8 @@ def add_result(match_id, home_team_score, away_team_score):
 
     bets = Bet.query.filter(Bet.match_id == match_id).all()
     for bet in bets:
-        bet.points = calculate_user_points(home_team_score, away_team_score, bet.home_team_score, bet.away_team_score)
+        bet.points, bet.total_points = calculate_user_points(home_team_score, away_team_score,
+                                                             bet.home_team_score, bet.away_team_score, 1.5)
 
     db.session.commit()
 
@@ -96,7 +97,7 @@ def get_past_matches_and_bets_by_tournament(tournament_id):
     return users, match_user_bet
 
 
-def calculate_user_points(match_home_score, match_away_score, bet_home_score, bet_away_score):
+def calculate_user_points(match_home_score, match_away_score, bet_home_score, bet_away_score, multiplier):
     points = 0
     if match_home_score - match_away_score > 0 and bet_home_score - bet_away_score > 0 \
             or match_home_score - match_away_score == 0 and bet_home_score - bet_away_score == 0\
@@ -116,6 +117,8 @@ def calculate_user_points(match_home_score, match_away_score, bet_home_score, be
         if match_home_score == bet_home_score and match_away_score == bet_away_score:
             points += 3
 
-    return points
+    total_points = points * multiplier
+
+    return points, total_points
 
 

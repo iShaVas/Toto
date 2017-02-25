@@ -101,8 +101,8 @@
                             {% endif %}
                             <br>
                             {% if match_data[i] is not none %}
-                                {% if match_data[i].points is not none %}
-                                    <div class="bet-points">{{match_data[i].points}}</div>
+                                {% if match_data[i].total_points is not none %}
+                                    <div class="bet-points">{{(match_data[i].total_points|round(1)|string).rstrip('0').rstrip('.')}}</div>
                                 {% endif %}
                             {% endif %}
                         </td>
@@ -114,7 +114,7 @@
             <div>
 
             <div class="col-xs-2 col-xs-offset-2 rating-table" style="
-    margin-top: 0px;
+    margin-top: 0px; min-width: 290px;
 "> <!-- Ratings -->
                 <table class="table table-striped">
                     <caption>Общий рейтинг</caption>
@@ -131,9 +131,9 @@
                     <tr>
                         <td class="text-right">{{i + 1}}</td>
                         <td class="text-left">{{row.User.nickname}}</td>
-                        <td class="text-left">{{(row.points|int / row.count)|round(2, 'floor') if row.count > 0 else ""}}</td>
+                        <td class="text-left">{{(row.total_points|int / row.count)|round(2, 'floor') if row.count > 0 else ""}}</td>
                         <td class="text-right">
-                            <b>{{row.points if row.points is not none else "0"}}</b>
+                            <b>{{(row.total_points|round(1)|string).rstrip('0').rstrip('.') if row.total_points is not none else "0"}}</b>
                         </td>
                     </tr>
                     {% endfor %}
@@ -143,7 +143,7 @@
             </div>
 
                 {% if last_day_points|length > 0 %}
-            <div class="col-xs-2 col-xs-offset-2 last-day-points-table" style="margin-top: 280px;"> <!-- Last day points -->
+            <div class="col-xs-2 col-xs-offset-2 last-day-points-table" style="margin-top: 260px; min-width: 290px;"> <!-- Last day points -->
                 <table class="table table-striped">
                     <caption>Рейтинг за последний игровой день</caption>
                     <thead>
@@ -159,7 +159,7 @@
                         <td class="text-right">{{o + 1}}</td>
                         <td class="text-left">{{row.User.nickname}}</td>
                         <td class="text-right">
-                            <b>{{row.points if row.points is not none else "0"}}</b>
+                            <b>{{(row.total_points|round(1)|string).rstrip('0').rstrip('.') if row.total_points is not none else "0"}}</b>
                         </td>
                     </tr>
                     {% endfor %}

@@ -60,12 +60,15 @@ class Bet(db.Model):
     home_team_score = db.Column(db.Integer, index=True)
     away_team_score = db.Column(db.Integer, index=True)
     points = db.Column(db.Integer, index=True)
+    multiplier = db.Column(db.Numeric(2, 2), index=True)
+    total_points = db.Column(db.Numeric(3, 2), index=True)
 
-    def __init__(self, user_id, match_id, home_team_score, away_team_score):
+    def __init__(self, user_id, match_id, home_team_score, away_team_score, multiplier):
         self.user_id = user_id
         self.match_id = match_id
         self.home_team_score = home_team_score
         self.away_team_score = away_team_score
+        self.multiplier = multiplier
 
     def __repr__(self):
         return '<Bet: {0}:{1}>'.format(self.home_team_score, self.away_team_score)

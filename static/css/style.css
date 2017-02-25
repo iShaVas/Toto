@@ -1,6 +1,7 @@
         .bet-points {
-            border-radius: 50%;
-            width: 20px;
+            //border-radius: 50%;
+            //width: 20px;
+            width: 40px;
             text-align: center;
             border-color: #337AB7;
             display: inline-block;
