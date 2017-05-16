@@ -45,7 +45,7 @@ def add_result(match_id, home_team_score, away_team_score):
     bets = Bet.query.filter(Bet.match_id == match_id).all()
     for bet in bets:
         bet.points, bet.total_points = calculate_user_points(home_team_score, away_team_score,
-                                                             bet.home_team_score, bet.away_team_score, 1.5)
+                                                             bet.home_team_score, bet.away_team_score, 5)
 
     db.session.commit()
 

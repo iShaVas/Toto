@@ -114,8 +114,8 @@
             <div>
 
             <div class="col-xs-2 col-xs-offset-2 rating-table" style="
-    margin-top: 0px; min-width: 290px;
-"> <!-- Ratings -->
+                margin-top: 0px; min-width: 290px;
+            "> <!-- Ratings -->
                 <table class="table table-striped">
                     <caption>Общий рейтинг</caption>
                     <thead>
@@ -131,14 +131,14 @@
                     <tr>
                         <td class="text-right">{{i + 1}}</td>
                         <td class="text-left">{{row.User.nickname}}</td>
-                        <td class="text-left">{{(row.total_points|int / row.count)|round(2, 'floor') if row.count > 0 else ""}}</td>
+                        <td class="text-left">{{(row.points|int / row.count)|round(2, 'floor') if row.count > 0 else ""}}</td>
                         <td class="text-right">
                             <b>{{(row.total_points|round(1)|string).rstrip('0').rstrip('.') if row.total_points is not none else "0"}}</b>
                         </td>
                     </tr>
                     {% endfor %}
                 </table>
-                <small>*Среднее количество очков за каждый прогноз</small>
+                <small>*Среднее количество очков за каждый прогноз без учета коэффициентов</small>
 
             </div>
 

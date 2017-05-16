@@ -25,7 +25,7 @@ def add_new_bet(user_id, match_id, home_score, away_score):
         bet.home_team_score = home_score
         bet.away_team_score = away_score
     else:
-        bet = Bet(user_id, match_id, home_score, away_score, 1.5)
+        bet = Bet(user_id, match_id, home_score, away_score, 5)
         db.session.add(bet)
         db.session.flush()
 
@@ -38,7 +38,7 @@ def add_new_bet(user_id, match_id, home_score, away_score):
 
 
 def get_points_of_users_by_tournament(tournament_id):
-    return db.session.query(User, func.count(Bet.total_points).label('count'), func.sum(Bet.total_points).label("total_points"), Match) \
+    return db.session.query(User, func.count(Bet.total_points).label('count'), func.sum(Bet.points).label("points"), func.sum(Bet.total_points).label("total_points"), Match) \
         .outerjoin(Bet, Bet.user_id == User.id) \
         .outerjoin(Match, Bet.match_id == Match.id) \
         .filter(Match.tournament == tournament_id) \
