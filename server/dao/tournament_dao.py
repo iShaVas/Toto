@@ -4,6 +4,7 @@ from server.models import Tournament
 
 def get_all_tournaments():
     return db.session.query(Tournament.name, Tournament.name_full).order_by(Tournament.date_start).all()
+    # return [tuple(t) for t in db.session.query(Tournament.name, Tournament.name).order_by(Tournament.date_start).all()]
 
 
 def add_tournament(name, name_full, date_start, date_end):

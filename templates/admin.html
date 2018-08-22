@@ -14,7 +14,7 @@
     {% include 'header.html' %}
         <div class="container-fluid">
             <div class="tabbable tabs-left">
-                <div class="col-md-2" style="margin-left: 400px;">
+                <div class="col-md-2" style="margin-left: 200px;">
                     <ul class="nav nav-pills nav-stacked" style="width: 75%;">
                       <li  class="active"><a href="#standart_form" data-toggle="tab">Добавить вручную</a></li>
                       <li><a href="#area_form" data-toggle="tab">Добавить автоматически</a></li>
@@ -23,7 +23,7 @@
                 <div class="tab-content">
                      <div class="tab-pane active" id="standart_form">
 
-                         <form action="/admin" method="post" name="admin" style="width: 500px" class="center-block">
+                         <form action="/admin" method="post" name="admin" style="width: 700px" class="center-block">
                             <div class="row">
                                 <h2 class="text-left">Добавить матч</h2>
                             </div>
@@ -85,20 +85,20 @@
                          </form>
                      </div>
                      <div class="tab-pane" id="area_form">
-                         <form action="/admin" method="post" name="admin" style="width: 500px" class="center-block">
+                         <form action="/admin" method="post" name="admin" style="width: 700px" class="center-block">
                             <div class="row">
                                 <h2 class="text-left">Добавить матч</h2>
                             </div>
                             <div class="row">
 
-                                <div class="col-md-5">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="time_start">Дата начала</label>
                                         {{form.date_start(class="form-control", type="date", id="date_start_area")}}
                                     </div>
                                 </div>
 
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                      <div class="form-group">
                                         <label for="tournament">Турнир</label>
                                         {{form.tournament(class_="form-control")}}
@@ -115,8 +115,8 @@
                              </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <label for="add_match_area">Информация о матче</label>
-                                    {{form.add_match_area(class="form-control", rows="5")}}
+                                    <label for="add_match_area">Информация о матчах</label>
+                                    {{form.add_match_area(class="form-control", rows="10")}}
                                 </div>
                             </div>
 

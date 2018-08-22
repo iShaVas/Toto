@@ -123,8 +123,8 @@
                             </div>
                         </td>
                         <td class="text-center">
-                            {% if match.Bet is not none and match.Bet.points is not none %}
-                            <div class="bet-points">{{match.Bet.points}}</div>
+                            {% if match.Bet is not none and match.Bet.total_points is not none %}
+                            <div class="bet-points">{{(match.Bet.total_points|round(1)|string).rstrip('0').rstrip('.')}}</div>
                             {% endif %}
                         </td>
                     </tr>

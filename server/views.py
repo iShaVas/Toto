@@ -73,7 +73,7 @@ def admin():
     form = AddMatchForm.new()
     if form.is_submitted():
         if form.add_match_area.data != '':
-            strings = form.add_match_area.data.split("\r\n")
+            strings = form.add_match_area.raw_data[0].split("\r\n")
             for string in strings:
                 if string != '':
                     r = re.search('(\d\d:\d\d)\s+\"?([\w\d\s]+)\"?\s+-\s+\"?([\w\d\s]+)\"?', string)
@@ -81,20 +81,20 @@ def admin():
                         home_team = r.group(2)
                         away_team = r.group(3)
                         time = r.group(1)
-                        date = datetime.datetime.strptime(form.date_start.data, '%Y-%m-%d')
+                        date = datetime.datetime.strptime(form.date_start.raw_data[0], '%Y-%m-%d')
                         time = datetime.datetime.strptime(time, '%H:%M')
                         date = date.replace(hour=time.hour, minute=time.minute)
                         date = date - datetime.timedelta(hours=form.timezone.data)
-                        add_match(form.tournament.data, home_team, away_team, date)
+                        add_match(form.tournament.raw_data[0], home_team, away_team, date)
                     else:
                         print("Cannot add this string: " + string)
             return redirect('/admin')
         if form.validate():
-            date = datetime.datetime.strptime(form.date_start.data, '%Y-%m-%d')
-            time = datetime.datetime.strptime(form.time_start.data, '%H:%M')
+            date = datetime.datetime.strptime(form.date_start.raw_data[0], '%Y-%m-%d')
+            time = datetime.datetime.strptime(form.time_start.raw_data[0], '%H:%M')
             date = date.replace(hour=time.hour, minute=time.minute)
             date = date - datetime.timedelta(hours=form.timezone.data)
-            add_match(form.tournament.data, form.home_team.data, form.away_team.data, date)
+            add_match(form.tournament.raw_data[0], form.home_team.raw_data[0], form.away_team.raw_data[0], date)
             return redirect('/admin')
 
     return render_template('admin.html', form=form)
