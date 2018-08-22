@@ -1,10 +1,10 @@
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SelectField, TextAreaField, DateField
 from wtforms.validators import equal_to, length, DataRequired
 from server.dao.tournament_dao import get_all_tournaments
 
 
-class RegistrationForm(Form):
+class RegistrationForm(FlaskForm):
     first_name = StringField('First Name', validators=[DataRequired()], _name='first_name')
     last_name = StringField('Last Name', validators=[DataRequired()], _name='last_name')
     nickname = StringField('Last Name', validators=[DataRequired()], _name='nickname')
@@ -13,18 +13,18 @@ class RegistrationForm(Form):
     email = StringField('Email', validators=[DataRequired()], _name='email')
 
 
-class LoginForm(Form):
+class LoginForm(FlaskForm):
     nickname = StringField('Nickname', validators=[DataRequired()], _name='nickname')
     password = PasswordField('Password', validators=[DataRequired()], _name='password')
 
 
-class AddMatchForm(Form):
-    tournament = SelectField('Tournament', validators=[DataRequired()], coerce=str)
+class AddMatchForm(FlaskForm):
+    tournament = SelectField('Tournament Name', validators=[DataRequired()], coerce=str)
     home_team = StringField('Home Team', validators=[DataRequired()])
     away_team = StringField('Away Team', validators=[DataRequired()])
     time_start = StringField('Time Start', validators=[DataRequired()])
-    date_start = StringField('Time Start', validators=[DataRequired()])
-    timezone = SelectField('Time Start', validators=[DataRequired()], choices=[(0, 'UTC+0'), (1, 'UTC+1'), (2, 'UTC+2'),
+    date_start = StringField('Date Start', validators=[DataRequired()])
+    timezone = SelectField('Time Zone', validators=[DataRequired()], choices=[(0, 'UTC+0'), (1, 'UTC+1'), (2, 'UTC+2'),
                                                                                (3, 'UTC+3'), (4, 'UTC+4'), (5, 'UTC+5'),
                                                                                (6, 'UTC+6'), (7, 'UTC+7'),
                                                                                (8, 'UTC+8')], default=3, coerce=int)
@@ -36,10 +36,11 @@ class AddMatchForm(Form):
         tournaments = get_all_tournaments()
         form.tournament.choices = tournaments
         form.tournament.default = tournaments[-1][0]
+        form.process()
         return form
 
 
-class AddTournamentForm(Form):
+class AddTournamentForm(FlaskForm):
     name = StringField('Tournament Name', validators=[DataRequired()], _name='name')
     name_full = StringField('Tournament Name Full', validators=[DataRequired()], _name='name')
     date_start = DateField('Date Start', validators=[DataRequired()])
