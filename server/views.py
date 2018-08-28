@@ -5,7 +5,7 @@ import flask_login
 from flask import render_template, redirect, url_for
 from flask import request
 from flask_login import logout_user, current_user, login_required
-from server.dao.match_dao import add_match, get_nearest_matches_and_bets_by_user, get_past_matches_and_bets_by_user, \
+from server.dao.match_dao import add_match,  \
     add_result
 
 from server import app, login_manager
@@ -28,19 +28,9 @@ def load_user(nickname):
 @app.route('/')
 def index():
     if current_user.is_authenticated:
-        return redirect('/home')
+        return redirect('/statistics')
     else:
         return redirect('/login')
-
-
-@app.route('/home')
-def home():
-    if current_user.is_authenticated:
-        matches = get_nearest_matches_and_bets_by_user(current_user.id)
-        past_matches = get_past_matches_and_bets_by_user(current_user.id)
-        return render_template('home.html', user=current_user, matches=matches, past_matches=past_matches)
-
-    return redirect('/login')
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -64,7 +54,7 @@ def login():
                 user = User()
                 user.id = form.nickname.data
                 flask_login.login_user(user)
-                return redirect('/')
+                return redirect('/statistics')
 
     return render_template('login.html', form=form)
 
@@ -133,12 +123,15 @@ def statistics_default():
 @app.route('/statistics/<tournament_name>', methods=['GET', 'POST'])
 @login_required
 def statistics(tournament_name):
+    now = datetime.datetime.utcnow()
+    # matches = get_nearest_matches_and_bets_by_user(current_user.id)
     tournaments = get_all_tournaments()
     current_tournament = get_name_full_tournament_by_name(tournament_name)
-    users, match_user_bet = get_past_matches_and_bets_by_tournament(tournament_name)
+    users_list, match_user_bet = get_past_matches_and_bets_by_tournament(tournament_name)
+    # users, match_user_bet = get_past_matches_and_bets_by_tournament(tournament_name)
     rating_table = get_points_of_users_by_tournament(tournament_name)
     last_day_points = get_points_of_users_by_tournament_last_day(tournament_name)
-    return render_template('statistics.html', users=users, matches_data=match_user_bet, rating_table=rating_table,
+    return render_template('statistics.html', now=now, current_user=current_user, users_list=users_list, matches_data=match_user_bet, rating_table=rating_table,
                            tournaments=tournaments, current_tournament=current_tournament,
                            last_day_points=last_day_points)
 
