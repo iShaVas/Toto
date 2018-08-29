@@ -1,4 +1,5 @@
 import datetime
+from jinja2 import Template
 
 import math
 from sqlalchemy import and_
@@ -7,6 +8,14 @@ from sqlalchemy.sql.operators import as_
 
 from server import models, db
 from server.models import Match, Bet, User
+
+template = Template("""
+# Generation started on {{ now() }}
+... this is the rest of my template...
+# Completed generation.
+""")
+
+template.globals['now'] = datetime.datetime.utcnow
 
 
 def add_match(tournament, home_team, away_team, time_start):
@@ -17,24 +26,6 @@ def add_match(tournament, home_team, away_team, time_start):
 
 def get_match_by_id(match_id):
     return Match.query.filter(Match.id == match_id).first()
-
-
-def get_nearest_matches_and_bets_by_user(user_id):
-    now = datetime.datetime.utcnow()
-    return db.session.query(Match, Bet) \
-        .outerjoin(Bet, and_(Bet.match_id == Match.id, Bet.user_id == user_id)) \
-        .filter(Match.time_start > now) \
-        .order_by(Match.time_start) \
-        .all()
-
-
-def get_past_matches_and_bets_by_user(user_id):
-    now = datetime.datetime.utcnow()
-    return db.session.query(Match, Bet) \
-        .outerjoin(Bet, and_(Bet.match_id == Match.id, Bet.user_id == user_id)) \
-        .filter(Match.time_start < now) \
-        .order_by(Match.time_start.desc()) \
-        .all()
 
 
 def add_result(match_id, home_team_score, away_team_score):
@@ -51,50 +42,44 @@ def add_result(match_id, home_team_score, away_team_score):
 
 
 def get_past_matches_and_bets_by_tournament(tournament_id):
-    now = datetime.datetime.utcnow()
+    users_list = User.query.order_by(User.id).all()
 
-    users = User.query.order_by(User.id).all()
-    qbets = Bet.query.all()
+    data = db.session.query(Match, Bet, User) \
+        .outerjoin(Bet, Bet.match_id == Match.id) \
+        .outerjoin(User, Bet.user_id == User.id) \
+        .filter(Match.tournament == tournament_id) \
+        .order_by(Match.time_start.desc()) \
+        .all()
 
-    bets = {}
-    for bet in qbets:
-        bets.update({bet.id: bet})
+    dic = {}
 
-    q = db.session.query(Match)
+    for match, bet, user in data:
+        match_data = {}
+        if match.id in dic:
+            match_data = dic[match.id]['users']
+        else:
+            dic[match.id] = {'match': match}
+        if user:
+            match_data.update({user.id: {'user': user, 'bet': bet}})
+            dic[match.id]['users'] = match_data
 
-    for user in users:
-        bet_alias = aliased(Bet)
-        q = q.add_columns(bet_alias.id.label(str(user.id)))
-        q = q.outerjoin(bet_alias, and_(bet_alias.match_id == Match.id, user.id == bet_alias.user_id))
+    array = []
+    for k, v in dic.items():
+        array.append(v)
 
-    q = q.filter(Match.time_start < now).filter(Match.tournament == tournament_id)
-    q = q.order_by(Match.time_start.desc(), Match.id)
-    q = q.all()
+    for match in array:
+        if 'users' in match:
+            users = match['users']
+        else:
+            users = {}
 
-    match_user_bet = []
+        for user in users_list:
+            if user.id not in users:
+                users.update({user.id: {'user': user, 'bet': None}})
 
-    for line in q:
-        l = [line[0]]
-        for i in range(1, len(line)):
-            if line[i] is not None:
-                l.append(bets[line[i]])
-            else:
-                l.append(None)
+        match['users'] = users
 
-        match_user_bet.append(l)
-
-    """
-        users - list of Users :  [User1, User2, User3]
-
-        match_user_bet - table (list of lists) of Bets :
-            [
-                [Match1, Bet of User1, Bet of User2, Bet of User3]
-                [Match2, Bet of User1, Bet of User2, Bet of User3]
-                [Match3, Bet of User1, Bet of User2, Bet of User3]
-            ]
-    """
-
-    return users, match_user_bet
+    return users_list, array
 
 
 def calculate_user_points(match_home_score, match_away_score, bet_home_score, bet_away_score, multiplier):

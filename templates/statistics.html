@@ -37,6 +37,15 @@
             color: #333;
             text-align: center;
         }
+        .team-score-input{
+            width: 20px;
+            text-align: center;
+        }
+        .match-score-column{
+            white-space: nowrap;
+            padding: 0px;
+        }
+
     </style>
 
 </head>
@@ -60,7 +69,6 @@
         </form>
              <div class="text-center"><h2>{{current_tournament.name_full}}</h2></div>
         <div class="row">
-
             <div class="col-xs-6"> <!-- The last matches -->
                 <table class="table table-striped">
                     <thead>
@@ -69,53 +77,79 @@
                             <th class="text-right">Домашняя команда</th>
                             <th class="text-center">Счёт</th>
                             <th>Гостевая команда</th>
-                            {% for user in users %}
+                            {% for user in users_list %}
                             <th class="text-center">{{user.nickname}}</th>
                             {% endfor %}
                         </tr>
                     </thead>
                     {% for i in range(matches_data|length) %}
                     {% set match_data = matches_data[i] %}
-                    {% if i == 0 or matches_data[i][0].time_start.day != matches_data[i-1][0].time_start.day %}
+                    {% if i == 0 or matches_data[i]['match'].time_start.day != matches_data[i-1]['match'].time_start.day %}
                         <tr class="text-center info">
-                            <td class="get-normal-date-from-datetime" colspan="8">{{ match_data[0].time_start }}</td>
+                            <td class="get-normal-date-from-datetime" colspan="8">{{ match_data['match'].time_start }}</td>
                         </tr>
                     {% endif %}
                     <tr>
-                        <!-- td class="text-right get-normal-datetime-from-datetime">{{match_data[0].time_start}}</td -->
-                        <td class="text-right">{{match_data[0].home_team if match_data[0].home_team.istitle() else match_data[0].home_team.title()}}</td>
+                        <td class="text-right">{{match_data['match'].home_team if match_data['match'].home_team.istitle() else match_data['match'].home_team.title()}}</td>
                         <td class="text-center">
-                            {{match_data[0].home_team_score if match_data[0].home_team_score is not none else "-"}}:{{match_data[0].away_team_score if match_data[0].away_team_score is not none else "-"}}
+                            {{match_data['match'].home_team_score if match_data['match'].home_team_score is not none else "-"}}:{{match_data['match'].away_team_score if match_data['match'].away_team_score is not none else "-"}}
                         </td>
-                        <td>{{match_data[0].away_team if match_data[0].away_team.istitle() else match_data[0].away_team.title()}}</td>
-                        {% for i in range(1, match_data|length) %}
-                        <td class="text-center">
-                            {% if match_data[i] is not none %}
-                                {% if match_data[i].home_team_score is not none %}
-                                    {{match_data[i].home_team_score}}:{{match_data[i].away_team_score}}
+                        <td>{{match_data['match'].away_team if match_data['match'].away_team.istitle() else match_data['match'].away_team.title()}}</td>
+                        {% if match_data['match'].time_start < now %}
+                            {% for user in users_list %}
+                            <td class="text-center">
+                                {% if match_data['users'][user.id]['bet'] is not none %}
+                                    {% if match_data['users'][user.id]['bet'].home_team_score is not none %}
+                                        {{match_data['users'][user.id]['bet'].home_team_score}}:{{match_data['users'][user.id]['bet'].away_team_score}}
+                                    {% else %}
+                                        —
+                                    {% endif %}
                                 {% else %}
                                     —
                                 {% endif %}
-                            {% else %}
-                                —
-                            {% endif %}
-                            <br>
-                            {% if match_data[i] is not none %}
-                                {% if match_data[i].total_points is not none %}
-                                    <div class="bet-points">{{(match_data[i].total_points|round(1)|string).rstrip('0').rstrip('.')}}</div>
+                                <br>
+                                {% if match_data['users'][user.id]['bet'] is not none %}
+                                    {% if match_data['users'][user.id]['bet'].points is not none %}
+                                        <div class="bet-points">{{match_data['users'][user.id]['bet'].points}}</div>
+                                    {% endif %}
                                 {% endif %}
-                            {% endif %}
-                        </td>
-                        {% endfor %}
+                            </td>
+                            {% endfor %}
+                        {% else %}
+                            {% for user in users_list %}
+                                <td class="text-center">
+                                    {% if current_user.id == user.id %}
+                                    <div class="text-left match-score-column">
+                                        <input class="team-score-input" value="{{match_data['users'][user.id]['bet'].home_team_score}}"
+                                            data-match-id="{{match_data['match'].id}}" id="match_{{match_data['match'].id}}_home"/>
+                                            <span>:</span>
+                                        <input class="team-score-input" value="{{match_data['users'][user.id]['bet'].away_team_score}}"
+                                             data-match-id="{{match_data['match'].id}}" id="match_{{match_data['match'].id}}_away"/>
+                                    </div>
+
+                                    {% else %}
+                                        {% if match_data['users'][user.id]['bet'] is not none %}
+                                            <span class="glyphicon glyphicon-ok"></span>
+                                        {% else %}
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        {% endif %}
+
+                                    {% endif %}
+
+                            </td>
+                            {% endfor %}
+                        {% endif %}
                     </tr>
+
                     {% endfor %}
                 </table>
             </div>
-            <div>
+
+
 
             <div class="col-xs-2 col-xs-offset-2 rating-table" style="
-                margin-top: 0px; min-width: 290px;
-            "> <!-- Ratings -->
+    margin-top: 0px;
+"> <!-- Ratings -->
                 <table class="table table-striped">
                     <caption>Общий рейтинг</caption>
                     <thead>
@@ -133,17 +167,17 @@
                         <td class="text-left">{{row.User.nickname}}</td>
                         <td class="text-left">{{(row.points|int / row.count)|round(2, 'floor') if row.count > 0 else ""}}</td>
                         <td class="text-right">
-                            <b>{{(row.total_points|round(1)|string).rstrip('0').rstrip('.') if row.total_points is not none else "0"}}</b>
+                            <b>{{row.points if row.points is not none else "0"}}</b>
                         </td>
                     </tr>
                     {% endfor %}
                 </table>
-                <small>*Среднее количество очков за каждый прогноз без учета коэффициентов</small>
+                <small>*Среднее количество очков за каждый прогноз</small>
 
             </div>
 
                 {% if last_day_points|length > 0 %}
-            <div class="col-xs-2 col-xs-offset-2 last-day-points-table" style="margin-top: 317px; min-width: 290px;"> <!-- Last day points -->
+            <div class="col-xs-2 col-xs-offset-2 last-day-points-table" style="margin-top: 280px;"> <!-- Last day points -->
                 <table class="table table-striped">
                     <caption>Рейтинг за последний игровой день</caption>
                     <thead>
@@ -159,7 +193,7 @@
                         <td class="text-right">{{o + 1}}</td>
                         <td class="text-left">{{row.User.nickname}}</td>
                         <td class="text-right">
-                            <b>{{(row.total_points|round(1)|string).rstrip('0').rstrip('.') if row.total_points is not none else "0"}}</b>
+                            <b>{{row.points if row.points is not none else "0"}}</b>
                         </td>
                     </tr>
                     {% endfor %}
