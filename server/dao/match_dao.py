@@ -1,7 +1,7 @@
 import datetime
-from jinja2 import Template
-
 import math
+
+from jinja2 import Template
 from sqlalchemy import and_
 from sqlalchemy.orm import aliased
 from sqlalchemy.sql.operators import as_
@@ -26,6 +26,25 @@ def add_match(tournament, home_team, away_team, time_start):
 
 def get_match_by_id(match_id):
     return Match.query.filter(Match.id == match_id).first()
+
+
+def get_nearest_matches_and_bets_by_user(user_id):
+    now = datetime.datetime.utcnow()
+    return db.session.query(Match, Bet) \
+        .outerjoin(Bet, and_(Bet.match_id == Match.id, Bet.user_id == user_id)) \
+        .filter(Match.time_start > now) \
+        .order_by(Match.time_start) \
+        .all()
+
+
+def get_past_matches_and_bets_by_user(user_id):
+    now = datetime.datetime.utcnow()
+    return db.session.query(Match, Bet) \
+        .outerjoin(Bet, and_(Bet.match_id == Match.id, Bet.user_id == user_id)) \
+        .filter(Match.time_start < now) \
+        .order_by(Match.time_start.desc()) \
+        .all()
+
 
 
 def add_result(match_id, home_team_score, away_team_score):

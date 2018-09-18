@@ -44,7 +44,7 @@ def get_points_of_users_by_tournament(tournament_id):
         .filter(Match.tournament == tournament_id) \
         .filter(Bet.points is not None) \
         .group_by(Bet.user_id) \
-        .order_by(func.sum(Bet.points).desc(), func.count(Bet.points)) \
+        .order_by(func.sum(Bet.total_points).desc(), func.count(Bet.total_points)) \
         .all()
 
 

@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SelectField, TextAreaField, DateField
-from wtforms.validators import equal_to, length, DataRequired
+from wtforms.validators import equal_to, length, DataRequired, InputRequired
 from server.dao.tournament_dao import get_all_tournaments
 
 
@@ -19,12 +19,12 @@ class LoginForm(FlaskForm):
 
 
 class AddMatchForm(FlaskForm):
-    tournament = SelectField('Tournament Name', validators=[DataRequired()], coerce=str)
-    home_team = StringField('Home Team', validators=[DataRequired()])
-    away_team = StringField('Away Team', validators=[DataRequired()])
-    time_start = StringField('Time Start', validators=[DataRequired()])
-    date_start = StringField('Date Start', validators=[DataRequired()])
-    timezone = SelectField('Time Zone', validators=[DataRequired()], choices=[(0, 'UTC+0'), (1, 'UTC+1'), (2, 'UTC+2'),
+    tournament = SelectField('Tournament Name', validators=[InputRequired()], coerce=str)
+    home_team = StringField('Home Team', validators=[InputRequired()])
+    away_team = StringField('Away Team', validators=[InputRequired()])
+    time_start = StringField('Time Start', validators=[InputRequired()])
+    date_start = StringField('Date Start', validators=[InputRequired()])
+    timezone = SelectField('Time Zone', validators=[InputRequired()], choices=[(0, 'UTC+0'), (1, 'UTC+1'), (2, 'UTC+2'),
                                                                                (3, 'UTC+3'), (4, 'UTC+4'), (5, 'UTC+5'),
                                                                                (6, 'UTC+6'), (7, 'UTC+7'),
                                                                                (8, 'UTC+8')], default=3, coerce=int)

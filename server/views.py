@@ -5,7 +5,7 @@ import flask_login
 from flask import render_template, redirect, url_for
 from flask import request
 from flask_login import logout_user, current_user, login_required
-from server.dao.match_dao import add_match,  \
+from server.dao.match_dao import add_match, get_nearest_matches_and_bets_by_user, get_past_matches_and_bets_by_user, \
     add_result
 
 from server import app, login_manager
@@ -72,7 +72,7 @@ def admin():
         return redirect('/')
     form = AddMatchForm.new()
     if form.is_submitted():
-        if form.add_match_area.data != '':
+        if form.add_match_area.raw_data:
             strings = form.add_match_area.raw_data[0].split("\r\n")
             for string in strings:
                 if string != '':
@@ -98,6 +98,7 @@ def admin():
             return redirect('/admin')
 
     return render_template('admin.html', form=form)
+
 
 
 @app.route('/save_bet', methods=['GET', 'POST'])
