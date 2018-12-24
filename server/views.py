@@ -5,12 +5,14 @@ import flask_login
 from flask import render_template, redirect, url_for
 from flask import request
 from flask_login import logout_user, current_user, login_required
+
+from server.dao import user_dao, match_dao, bet_dao
 from server.dao.match_dao import add_match, get_nearest_matches_and_bets_by_user, get_past_matches_and_bets_by_user, \
-    add_result
+    add_result, get_unique_tournaments_by_user
 
 from server import app, login_manager
 from server.dao.bet_dao import add_new_bet, get_points_of_users_by_tournament, \
-    get_points_of_users_by_tournament_last_day
+    get_points_of_users_by_tournament_last_day, get_points_by_user
 from server.dao.tournament_dao import get_all_tournaments, add_tournament, get_last_tournament, \
     get_name_full_tournament_by_name
 from server.dao.user_dao import register_user, get_user_by_nickname
@@ -100,7 +102,6 @@ def admin():
     return render_template('admin.html', form=form)
 
 
-
 @app.route('/save_bet', methods=['GET', 'POST'])
 @login_required
 def save_bet():
@@ -163,3 +164,30 @@ def add_new_tournament():
         return redirect('/admin')
 
     return render_template('addtournament.html', form=form)
+
+
+@app.route('/users/<nickname>', methods=['GET', 'POST'])
+@login_required
+def user_page(nickname):
+
+    users = user_dao.get_all_nicknames()
+    if nickname in users:
+        user_info = get_user_by_nickname(nickname)
+        all_points = get_points_by_user(user_info.id)
+
+        tournaments_stats = {}
+        tournaments = get_unique_tournaments_by_user(user_info.id)
+
+        for tournament in tournaments:
+            matches = match_dao.get_matches_by_tournament(tournament)
+            points = bet_dao.get_tournament_points_by_user(user_info.id, tournament)
+            average_points = points / matches
+            right_bets = bet_dao.get_right_bets(user_info.id, tournament)
+
+            tournaments_stats[tournament] = [matches, points, round(average_points, 2), right_bets]
+
+        return render_template('userpage.html', user_info=user_info, all_points=all_points,
+                               tournaments_stats=tournaments_stats)
+    else:
+        error_text = 'Упс! Невозможно найти пользователя с тами ником'
+        return render_template('error.html', error_text=error_text)

@@ -11,6 +11,9 @@ class User(db.Model):
     password = db.Column(db.String(120), index=True, unique=True)
     role = db.Column(db.String(10), default="USER")
     token = db.Column(db.String(64), index=True)
+    vk = db.Column(db.String(120), index=True, unique=True)
+    tg = db.Column(db.String(120), index=True, unique=True)
+    register_time = db.Column(db.DateTime, index=True)
 
     def is_authenticated(self):
         return True

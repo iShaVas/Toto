@@ -4,6 +4,7 @@ from flask import jsonify
 from sqlalchemy import func
 
 from server import db
+from server.dao import match_dao
 from server.dao.match_dao import get_match_by_id
 from server.models import Bet, User, Match
 
@@ -59,3 +60,28 @@ def get_points_of_users_by_tournament_last_day(tournament_id):
         .group_by(Bet.user_id) \
         .order_by(func.sum(Bet.points).desc(), func.count(Bet.points)) \
         .all()
+
+
+def get_points_by_user(user_id):
+    response = db.session.query(func.sum(Bet.points)).filter(Bet.user_id == user_id).all()
+    return response[0][0]
+
+
+def get_tournament_points_by_user(user_id, tournament):
+    matches_list = match_dao.get_tournament_matches(tournament)
+    response = db.session.query(func.sum(Bet.points))\
+        .filter(Bet.user_id == user_id)\
+        .filter(Bet.match_id.in_(matches_list))\
+        .all()
+    return response[0][0]
+
+
+def get_right_bets(user_id, tournament):
+    matches_list = match_dao.get_tournament_matches(tournament)
+
+    response = db.session.query(func.sum(Bet.points))\
+        .filter(Bet.user_id == user_id)\
+        .filter(Bet.match_id.in_(matches_list))\
+        .filter(Bet.points >= 10)\
+        .all()
+    return response[0][0]
