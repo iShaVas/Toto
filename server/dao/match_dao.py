@@ -1,11 +1,7 @@
 import datetime
 import math
-
 from jinja2 import Template
 from sqlalchemy import and_
-from sqlalchemy.orm import aliased
-from sqlalchemy.sql.operators import as_
-
 from server import models, db
 from server.models import Match, Bet, User
 
@@ -44,7 +40,6 @@ def get_past_matches_and_bets_by_user(user_id):
         .filter(Match.time_start < now) \
         .order_by(Match.time_start.desc()) \
         .all()
-
 
 
 def add_result(match_id, home_team_score, away_team_score):
@@ -126,3 +121,27 @@ def calculate_user_points(match_home_score, match_away_score, bet_home_score, be
     return points, total_points
 
 
+def get_unique_tournaments_by_user(user_id):
+    match_id = db.session.query(Bet.match_id).filter(Bet.user_id == user_id).all()
+    match_id_list = []
+    for id in match_id:
+        match_id_list.append(id.match_id)
+
+    tournaments_list = []
+    tournaments = db.session.query(Match.tournament).filter(Match.id.in_(match_id_list)).group_by(Match.tournament).all()
+    for tournament in tournaments:
+        tournaments_list.append(tournament.tournament)
+    return tournaments_list
+
+
+def get_matches_by_tournament(tournament):
+    return Match.query.filter(Match.tournament == tournament).count()
+
+
+def get_tournament_matches(tournament):
+    matches_list = []
+    matches = db.session.query(Match.id).filter(Match.tournament == tournament).all()
+    for match in matches:
+        matches_list.append(match.id)
+
+    return matches_list

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="UTF-8">
+        <title>{{ user_info['nickname'] }}</title>
+        <script src="/static/libs/jquery/jquery-2.2.3.min.js"></script>
+        <script src="/static/libs/bootstrap/js/bootstrap.js"></script>
+        <link rel="stylesheet" type="text/css" href="/static/libs/bootstrap/css/bootstrap.css">
+        <link rel="stylesheet" href="/static/css/header.css">
+        <link rel="stylesheet" href="/static/css/userpage.css">
+    </head>
+<body>
+    {% include 'header.html' %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+
+                    <div class="card-body">
+                        <div class="card-title mb-4">
+{#                                <div class="image-container">#}
+{#                                    <img src="http://placehold.it/150x150" id="imgProfile" style="width: 150px; height: 150px" class="img-thumbnail" />#}
+{#                                    <div class="middle">#}
+{#                                        <input type="button" class="btn btn-secondary" id="btnChangePicture" value="Change" />#}
+{#                                        <input type="file" style="display: none;" id="profilePicture" name="file" />#}
+{#                                    </div>#}
+{#                                </div>#}
+                            <h2 class="d-block" style="font-size: 1.5rem; font-weight: bold"><a href="javascript:void(0);">{{ user_info['first_name'] }} {{ user_info['last_name'] }}</a></h2>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <ul class="nav nav-tabs mb-4" id="userTab" role="tablist">
+                                    <li class="nav-item active">
+                                        <a class="nav-link active" id="basicInfo-tab" data-toggle="tab" href="#basicInfo" role="tab" aria-controls="basicInfo" aria-selected="true">Общая информация</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="statistic-tab" data-toggle="tab" href="#statistic" role="tab" aria-controls="statistic" aria-selected="false">Статистика</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content ml-1" id="userTabContent" style=" padding-top: 20px;">
+                                    <div class="tab-pane active" id="basicInfo" role="tabpanel" aria-labelledby="basicInfo-tab">
+
+                                        <div class="row">
+                                            <div class="col-sm-3 col-md-2 col-5">
+                                                <label style="font-weight:bold;">Ник</label>
+                                            </div>
+                                            <div class="col-md-8 col-6">
+                                                {{ user_info['nickname'] }}
+                                            </div>
+                                        </div>
+                                        <hr />
+
+                                        <div class="row">
+                                            <div class="col-sm-3 col-md-2 col-5">
+                                                <label style="font-weight:bold;">email</label>
+                                            </div>
+                                            <div class="col-md-8 col-6">
+                                                {{ user_info['email'] }}
+                                            </div>
+                                        </div>
+                                        <hr />
+
+
+                                        <div class="row">
+                                            <div class="col-sm-3 col-md-2 col-5">
+                                                <label style="font-weight:bold;">Vk</label>
+                                            </div>
+                                            <div class="col-md-8 col-6">
+                                                {{ user_info['vk'] }}
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div class="row">
+                                            <div class="col-sm-3 col-md-2 col-5">
+                                                <label style="font-weight:bold;">Telegram</label>
+                                            </div>
+                                            <div class="col-md-8 col-6">
+                                                {{ user_info['tg'] }}
+                                            </div>
+                                        </div>
+                                        <hr />
+
+                                    </div>
+                                    <div class="tab-pane fade" id="statistic" role="tabpanel" aria-labelledby="statistic-tab">
+
+                                        <div class="row">
+                                            <div class="col-sm-3 col-md-2 col-5">
+                                                <label style="font-weight:bold;">Очки за всё время</label>
+                                            </div>
+                                            <div class="col-md-8 col-6">
+                                                {{ all_points }}
+                                            </div>
+                                        </div>
+                                        <hr />
+
+                                        <div class="row">
+                                            <div class="col-sm-3 col-md-2 col-5">
+                                                <label style="font-weight:bold;">Зарегистрирован</label>
+                                            </div>
+                                            <div class="col-md-8 col-6">
+                                                {{ user_info['register_time'] }}
+                                            </div>
+                                        </div>
+                                        <hr />
+
+                                         <div class="row">
+                                            <div class="col-sm-3 col-md-2 col-5">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="text-right">Турнир</th>
+                                                            <th class="text-right">Матчи</th>
+                                                            <th class="text-right">Очки</th>
+                                                            <th class="text-right">Среднее</th>
+                                                            <th class="text-right">Точные</th>
+                                                        </tr>
+                                                    </thead>
+
+                                                    {% for key, val in tournaments_stats.items() %}
+                                                        <tr>
+                                                            <td class="text-center">{{ key }}</td>
+                                                            <td class="text-center">{{ val[0] }}</td>
+                                                            <td class="text-center">{{ val[1] }}</td>
+                                                            <td class="text-center">{{ val[2] }}</td>
+                                                            <td class="text-center">{{ val[3] }}</td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <hr />
+
+                                    </div>
+                                </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+</body>
+</html>

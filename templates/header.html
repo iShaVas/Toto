@@ -24,6 +24,10 @@
                 {% endif %}
 
                 <li>
+                    <a href="/users/{{ current_user['nickname'] }}"><span class="glyphicon glyphicon-user"></span></a>
+                </li>
+
+                <li>
                     <a href="/logout"><span class="glyphicon glyphicon-log-out"></span></a>
                 </li>
             </ul>
