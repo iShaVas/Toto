@@ -85,10 +85,8 @@
                     </thead>
                     {% for i in range(matches_data|length) %}
                     {% set match_data = matches_data[i] %}
-                    {% if i == 0 or matches_data[i]['match'].time_start.day != matches_data[i-1]['match'].time_start.day
-                                or matches_data[i]['match'].time_start.month != matches_data[i-1]['match'].time_start.month
-                                or matches_data[i]['match'].time_start.year != matches_data[i-1]['match'].time_start.year%}
-                                    <tr class="text-center info">
+                    {% if i == 0 or matches_data[i]['match'].time_start.day != matches_data[i-1]['match'].time_start.day %}
+                        <tr class="text-center info">
                             <td class="get-normal-date-from-datetime" colspan="8">{{ match_data['match'].time_start }}</td>
                         </tr>
                     {% endif %}
