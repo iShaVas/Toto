@@ -3,7 +3,6 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 from flask_login import LoginManager
 from config import basedir
-from flask_moment import Moment
 
 app = Flask(__name__, static_folder=os.path.join(basedir, 'static'), template_folder=os.path.join(basedir, 'templates'))
 
@@ -17,9 +16,4 @@ db = SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-moment = Moment(app)
-
 from server import views
-
-
-
