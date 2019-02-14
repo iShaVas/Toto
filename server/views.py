@@ -177,6 +177,7 @@ def user_page(nickname):
 
         tournaments_stats = {}
         tournaments = get_unique_tournaments_by_user(user_info.id)
+        tournaments.sort(reverse=True)
 
         for tournament in tournaments:
             matches = match_dao.get_matches_by_tournament(tournament)

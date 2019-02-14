@@ -76,12 +76,27 @@ def get_tournament_points_by_user(user_id, tournament):
     return response[0][0]
 
 
+def get_multipliers():
+    response = db.session.query(Bet.multiplier) \
+           .group_by(Bet.multiplier).all()
+    return [multiplier[0] for multiplier in response]
+
+
 def get_right_bets(user_id, tournament):
     matches_list = match_dao.get_tournament_matches(tournament)
 
-    response = db.session.query(func.sum(Bet.points))\
-        .filter(Bet.user_id == user_id)\
-        .filter(Bet.match_id.in_(matches_list))\
-        .filter(Bet.points >= 10)\
-        .all()
-    return response[0][0]
+    multipliers_list = get_multipliers()
+
+    right_bets = 0
+
+    for multiplier in multipliers_list:
+        right_bet = multiplier * 10
+
+        response = db.session.query(func.count(Bet.points))\
+            .filter(Bet.user_id == user_id)\
+            .filter(Bet.match_id.in_(matches_list))\
+            .filter(Bet.points == right_bet)\
+            .scalar()
+        right_bets += response
+
+    return right_bets
