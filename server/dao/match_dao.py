@@ -93,6 +93,8 @@ def get_past_matches_and_bets_by_tournament(tournament_id):
 
         match['users'] = users
 
+    array = sorted(array, key=lambda m: m['match'].time_start, reverse=True)
+
     return users_list, array
 
 
