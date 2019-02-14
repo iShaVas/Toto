@@ -96,6 +96,8 @@
                                         </div>
                                         <hr />
 
+                                        {% if user_info['register_time'] != None %}
+
                                         <div class="row">
                                             <div class="col-sm-3 col-md-2 col-5">
                                                 <label style="font-weight:bold;">Зарегистрирован</label>
@@ -104,28 +106,31 @@
                                                 {{ user_info['register_time'] }}
                                             </div>
                                         </div>
+
                                         <hr />
+
+                                        {% endif %}
 
                                          <div class="row">
                                             <div class="col-sm-3 col-md-2 col-5">
                                                 <table class="table table-striped">
                                                     <thead>
                                                         <tr>
-                                                            <th class="text-right">Турнир</th>
-                                                            <th class="text-right">Матчи</th>
-                                                            <th class="text-right">Очки</th>
-                                                            <th class="text-right">Среднее</th>
-                                                            <th class="text-right">Точные</th>
+                                                            <th class="text-left">Турнир</th>
+                                                            <th class="text-left">Матчи</th>
+                                                            <th class="text-left">Очки</th>
+                                                            <th class="text-left">Среднее</th>
+                                                            <th class="text-left">Точные</th>
                                                         </tr>
                                                     </thead>
 
                                                     {% for key, val in tournaments_stats.items() %}
                                                         <tr>
-                                                            <td class="text-center">{{ key }}</td>
-                                                            <td class="text-center">{{ val[0] }}</td>
-                                                            <td class="text-center">{{ val[1] }}</td>
-                                                            <td class="text-center">{{ val[2] }}</td>
-                                                            <td class="text-center">{{ val[3] }}</td>
+                                                            <td class="text-left">{{ key }}</td>
+                                                            <td class="text-right">{{ val[0] }}</td>
+                                                            <td class="text-right">{{ val[1] }}</td>
+                                                            <td class="text-right">{{ val[2] }}</td>
+                                                            <td class="text-right">{{ val[3] }}</td>
                                                         </tr>
                                                     {% endfor %}
                                                 </table>
