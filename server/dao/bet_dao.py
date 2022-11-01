@@ -26,7 +26,7 @@ def add_new_bet(user_id, match_id, home_score, away_score):
         bet.home_team_score = home_score
         bet.away_team_score = away_score
     else:
-        bet = Bet(user_id, match_id, home_score, away_score, 3) # edit here
+        bet = Bet(user_id, match_id, home_score, away_score, 1) # edit here
         db.session.add(bet)
         db.session.flush()
 
